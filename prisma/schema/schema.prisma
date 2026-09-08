@@ -1,0 +1,22 @@
+// ==========================================================
+// University Management System — Prisma Schema
+// Entry point: generator + datasource config.
+//
+// This project uses Prisma's multi-file schema feature
+// (previewFeatures = ["prismaSchemaFolder"]). All .prisma
+// files inside prisma/schema/ are compiled together as a
+// single schema — models/enums can reference each other
+// across files freely.
+//
+// Requires Prisma >= 5.15 (stable in Prisma 6+).
+// ==========================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgres://b9f7961c65734f5cf002223d8493abe5675b0a78ccf1d7775195323fefea44f1:sk_HYDjCKwNYTEbb9vo64oy2@pooled.db.prisma.io:5432/postgres?sslmode=require"
+}
