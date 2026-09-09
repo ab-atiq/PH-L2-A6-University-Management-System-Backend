@@ -41,15 +41,20 @@ import {
   NotificationType,
   PaymentGateway,
   PaymentStatus,
-  PrismaClient,
   ResultStatus,
   Role,
   SectionStatus,
   SemesterStatus,
   UserStatus,
 } from "../generated/prisma/client";
+import { prisma } from "./lib/prisma";
 
-const prisma = new PrismaClient();
+// use same prisma client in src/lib/prisma.ts and src/seed.ts to avoid multiple instances
+// import { PrismaPg } from "@prisma/adapter-pg";
+// import "dotenv/config";
+// const connectionString = `${process.env.DATABASE_URL}`;
+// const adapter = new PrismaPg({ connectionString });
+// const prisma = new PrismaClient({ adapter });
 
 const SALT_ROUNDS = 10;
 const DEMO_PASSWORD = "Passw0rd!123"; // same for every seeded account, see summary at the end
