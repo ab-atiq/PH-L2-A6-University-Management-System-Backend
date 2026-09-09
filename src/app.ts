@@ -1,5 +1,5 @@
 import express from "express";
-import { prisma } from "../lib/prisma";
+import { prisma } from "./lib/prisma";
 
 const app = express();
 const port = 3000;
@@ -17,11 +17,15 @@ app.get("/check-users", (req, res) => {
 
 app.get("/users", async (req, res) => {
   await prisma.user
-    .findMany()
-    .then((users) => {
+    .findMany({
+      omit: {
+        passwordHash: true,
+      },
+    })
+    .then((users: any[]) => {
       res.json(users);
     })
-    .catch((error) => {
+    .catch((error: any) => {
       console.error("Error fetching users:", error);
       res.status(500).json({ error: "Internal Server Error" });
     });

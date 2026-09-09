@@ -1,5 +1,5 @@
-import { prisma } from "../lib/prisma";
 import app from "./app";
+import { prisma } from "./lib/prisma";
 
 async function main() {
   await prisma.$connect();
