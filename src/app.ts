@@ -1,21 +1,39 @@
-import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import express, { type Request, type Response } from "express";
+import config from "./config";
 import { prisma } from "./lib/prisma";
+import { globalErrorHandler } from "./middleware/globalErrorHandler";
+import { notFound } from "./middleware/notFound";
 
 const app = express();
-const port = 3000;
 
-app.get("/", (req, res) => {
+app.use(
+  cors({
+    origin: config.frontend_url,
+    credentials: true,
+  }),
+);
+
+// Enable URL-encoded form data parsing
+app.use(express.urlencoded({ extended: true }));
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+app.use(cookieParser());
+
+app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.get("/check-users", (req, res) => {
+app.get("/check-users", (req: Request, res: Response) => {
   res.json([
     { id: 1, name: "John Doe" },
     { id: 2, name: "Jane Doe" },
   ]);
 });
 
-app.get("/users", async (req, res) => {
+app.get("/users", async (req: Request, res: Response) => {
   await prisma.user
     .findMany({
       omit: {
@@ -31,8 +49,11 @@ app.get("/users", async (req, res) => {
     });
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(config.port, () => {
+  console.log(`Example app listening on port ${config.port}`);
 });
+
+app.use(globalErrorHandler);
+app.use(notFound);
 
 export default app;

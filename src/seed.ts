@@ -47,6 +47,7 @@ import {
   SemesterStatus,
   UserStatus,
 } from "../generated/prisma/client";
+import config from "./config";
 import { prisma } from "./lib/prisma";
 
 // use same prisma client in src/lib/prisma.ts and src/seed.ts to avoid multiple instances
@@ -56,8 +57,7 @@ import { prisma } from "./lib/prisma";
 // const adapter = new PrismaPg({ connectionString });
 // const prisma = new PrismaClient({ adapter });
 
-const SALT_ROUNDS = 10;
-const DEMO_PASSWORD = "Passw0rd!123"; // same for every seeded account, see summary at the end
+const SALT_ROUNDS = Number(config.bcrypt_salt_rounds);
 
 // ----------------------------------------------------------
 // Small helpers
@@ -421,7 +421,6 @@ async function resetDatabase() {
 
 async function main() {
   await resetDatabase();
-  const passwordHash = await hashPassword(DEMO_PASSWORD);
 
   // --- Departments -----------------------------------------------------
   const departmentByCode: Record<string, { id: string }> = {};
@@ -518,14 +517,15 @@ async function main() {
   console.log("Created 2 semesters (1 completed, 1 current).");
 
   // --- Admin user ----------------------------------------------------------
+  let passwordHash = await hashPassword(config.admin_password);
   const adminUser = await prisma.user.create({
     data: {
-      email: "admin@university.edu",
+      email: config.admin_email,
       passwordHash,
       role: Role.ADMIN,
       status: UserStatus.ACTIVE,
-      firstName: "System",
-      lastName: "Administrator",
+      firstName: config.admin_name,
+      lastName: config.admin_name,
       emailVerified: true,
       lastLoginAt: new Date(),
     },
@@ -533,6 +533,7 @@ async function main() {
   console.log("Created 1 admin user.");
 
   // --- Faculty (User + FacultyProfile) --------------------------------------
+  passwordHash = await hashPassword(config.faculty_password);
   const facultyByEmpId: Record<string, { userId: string; profileId: string }> =
     {};
   for (const f of FACULTY) {
@@ -576,6 +577,7 @@ async function main() {
     const studentId = `STU2026${String(i + 1).padStart(3, "0")}`;
     const email = `${slug(first, last)}@student.university.edu`;
 
+    passwordHash = await hashPassword(config.student_password);
     const user = await prisma.user.create({
       data: {
         email,
@@ -1168,7 +1170,6 @@ async function main() {
   // Summary
   // ----------------------------------------------------------
   console.log("\n==================== SEED COMPLETE ====================");
-  console.log("Demo password for ALL seeded accounts:", DEMO_PASSWORD);
   console.log("---------------------------------------------------------");
   console.log("ADMIN     : admin@university.edu");
   console.log(
