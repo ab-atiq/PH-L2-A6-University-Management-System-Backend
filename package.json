@@ -2,7 +2,7 @@
   "name": "ums-a6",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "src/server.ts",
   "scripts": {
     "dev": "tsx watch ./src/server.ts",
     "build": "prisma generate && tsup",
