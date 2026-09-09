@@ -67,7 +67,7 @@ function randomInt(min: number, max: number): number {
 }
 
 function pick<T>(arr: T[]): T {
-  return arr[randomInt(0, arr.length - 1)];
+  return arr[randomInt(0, arr.length - 1)]!;
 }
 
 /** Marks are assumed to be on a 0–100 combined scale. */
@@ -440,7 +440,7 @@ async function main() {
       data: {
         name: p.name,
         code: p.code,
-        departmentId: departmentByCode[p.deptCode].id,
+        departmentId: departmentByCode[p.deptCode]!.id,
         durationYears: p.durationYears,
         totalCredits: p.totalCredits,
         status: EntityStatus.ACTIVE,
@@ -462,7 +462,7 @@ async function main() {
         title: c.title,
         description: `${c.title} — core course offered by the ${departmentByCode[c.deptCode] ? c.deptCode : ""} department.`,
         credits: c.credits,
-        departmentId: departmentByCode[c.deptCode].id,
+        departmentId: departmentByCode[c.deptCode]!.id,
         status: CourseStatus.PUBLISHED,
       },
     });
@@ -480,8 +480,8 @@ async function main() {
     if ("prereq" in c && c.prereq) {
       await prisma.coursePrerequisite.create({
         data: {
-          courseId: courseByCode[c.code].id,
-          prerequisiteId: courseByCode[c.prereq].id,
+          courseId: courseByCode[c.code]!.id,
+          prerequisiteId: courseByCode[c.prereq]!.id,
         },
       });
       prereqCount++;
@@ -548,7 +548,7 @@ async function main() {
       data: {
         userId: user.id,
         employeeId: f.empId,
-        departmentId: departmentByCode[f.deptCode].id,
+        departmentId: departmentByCode[f.deptCode]!.id,
         designation: f.designation,
         specialization: `${f.deptCode} Systems`,
         joinDate: new Date("2019-08-01"),
@@ -566,8 +566,8 @@ async function main() {
     studentId: string;
   }[] = [];
   for (let i = 0; i < STUDENT_NAMES.length; i++) {
-    const [first, last] = STUDENT_NAMES[i];
-    const deptCode = DEPT_CYCLE[i % DEPT_CYCLE.length];
+    const [first, last] = STUDENT_NAMES[i]!;
+    const deptCode = DEPT_CYCLE[i % DEPT_CYCLE.length]!;
     const studentId = `STU2026${String(i + 1).padStart(3, "0")}`;
     const email = `${slug(first, last)}@student.university.edu`;
 
@@ -588,8 +588,8 @@ async function main() {
       data: {
         userId: user.id,
         studentId,
-        programId: programByCode[PROGRAM_BY_DEPT[deptCode]].id,
-        departmentId: departmentByCode[deptCode].id,
+        programId: programByCode[PROGRAM_BY_DEPT[deptCode]!]!.id,
+        departmentId: departmentByCode[deptCode]!.id,
         currentSemesterId: currentSemester.id,
         batchYear: 2026,
         gender: i % 2 === 0 ? Gender.MALE : Gender.FEMALE,
@@ -630,7 +630,7 @@ async function main() {
     const course = courseByCode[s.courseCode];
     const section = await prisma.section.create({
       data: {
-        courseId: course.id,
+        courseId: course!.id,
         semesterId: completedSemester.id,
         sectionName: "A",
         capacity: s.capacity,
@@ -646,15 +646,15 @@ async function main() {
     await prisma.sectionFaculty.create({
       data: {
         sectionId: section.id,
-        facultyId: facultyByEmpId[s.facultyEmpId].profileId,
+        facultyId: facultyByEmpId[s.facultyEmpId]!.profileId,
         isPrimary: true,
       },
     });
     completedSections.push({
       id: section.id,
       courseCode: s.courseCode,
-      deptCode: course.deptCode,
-      credits: course.credits,
+      deptCode: course!.deptCode,
+      credits: course!.credits,
     });
   }
 
@@ -669,8 +669,8 @@ async function main() {
     const course = courseByCode[s.courseCode];
     const section = await prisma.section.create({
       data: {
-        courseId: course.id,
-        semesterId: currentSemester.id,
+        courseId: course!.id,
+        semesterId: currentSemester!.id,
         sectionName: "A",
         capacity: s.capacity,
         room: s.room,
@@ -685,21 +685,21 @@ async function main() {
     await prisma.sectionFaculty.create({
       data: {
         sectionId: section.id,
-        facultyId: facultyByEmpId[s.facultyEmpId].profileId,
+        facultyId: facultyByEmpId[s.facultyEmpId]!.profileId,
         isPrimary: true,
       },
     });
     currentSections.push({
       id: section.id,
       courseCode: s.courseCode,
-      deptCode: course.deptCode,
-      credits: course.credits,
+      deptCode: course!.deptCode,
+      credits: course!.credits,
     });
 
     // Notify the assigned faculty member
     await prisma.notification.create({
       data: {
-        userId: facultyByEmpId[s.facultyEmpId].userId,
+        userId: facultyByEmpId[s.facultyEmpId]!.userId,
         type: NotificationType.ACADEMIC,
         title: "New Section Assigned",
         message: `You have been assigned to teach ${s.courseCode} (Section A) for Fall 2026.`,
@@ -734,7 +734,7 @@ async function main() {
         action,
         entity,
         entityId,
-        metadata: metadata ?? undefined,
+        ...(metadata !== undefined ? { metadata } : {}),
       },
     });
     auditCount++;
@@ -808,7 +808,7 @@ async function main() {
                 COMPLETED_SEMESTER_SECTIONS.find(
                   (c) => c.courseCode === section.courseCode,
                 )!.facultyEmpId
-              ].userId,
+              ]!.userId,
           },
         });
         attendanceCount++;
@@ -824,7 +824,7 @@ async function main() {
           COMPLETED_SEMESTER_SECTIONS.find(
             (c) => c.courseCode === section.courseCode,
           )!.facultyEmpId
-        ].userId;
+        ]!.userId;
 
       const midResult = await prisma.result.create({
         data: {
@@ -941,7 +941,7 @@ async function main() {
         CURRENT_SEMESTER_SECTIONS.find(
           (c) => c.courseCode === section.courseCode,
         )!.facultyEmpId
-      ].userId;
+      ]!.userId;
 
     // Midterm scheduled but not yet graded; final not yet scheduled to occur
     const midterm = await prisma.exam.create({
@@ -978,7 +978,7 @@ async function main() {
 
       const enrollment = await prisma.enrollment.create({
         data: {
-          studentId: student.profileId,
+          studentId: student!.profileId,
           sectionId: section.id,
           status: isDropped
             ? EnrollmentStatus.DROPPED
@@ -989,7 +989,7 @@ async function main() {
       });
       enrollmentCount++;
       await logAudit(
-        student.userId,
+        student!.userId,
         AuditAction.ENROLL,
         "Enrollment",
         enrollment.id,
@@ -997,7 +997,7 @@ async function main() {
       );
       if (isDropped) {
         await logAudit(
-          student.userId,
+          student!.userId,
           AuditAction.DROP_ENROLLMENT,
           "Enrollment",
           enrollment.id,
@@ -1015,7 +1015,7 @@ async function main() {
         await prisma.attendance.create({
           data: {
             enrollmentId: enrollment.id,
-            studentId: student.profileId,
+            studentId: student!.profileId,
             sectionId: section.id,
             classDate: new Date(day),
             status,
@@ -1036,7 +1036,7 @@ async function main() {
       const invoice = await prisma.feeInvoice.create({
         data: {
           invoiceNumber,
-          studentId: student.profileId,
+          studentId: student!.profileId,
           semesterId: currentSemester.id,
           description: "Fall 2026 Tuition & Fees",
           amount: 45000,
@@ -1053,7 +1053,7 @@ async function main() {
         AuditAction.CREATE_INVOICE,
         "FeeInvoice",
         invoice.id,
-        { student: student.studentId },
+        { student: student!.studentId },
       );
 
       if (paymentOutcome === "PAID") {
@@ -1066,7 +1066,7 @@ async function main() {
           data: {
             transactionId: `TXN-${invoiceNumber}`,
             invoiceId: invoice.id,
-            studentId: student.profileId,
+            studentId: student!.profileId,
             amount: 45000,
             gateway,
             status: PaymentStatus.SUCCESS,
@@ -1076,7 +1076,7 @@ async function main() {
         });
         paymentCount++;
         await logAudit(
-          student.userId,
+          student!.userId,
           AuditAction.UPDATE_PAYMENT_STATUS,
           "Payment",
           payment.id,
@@ -1084,7 +1084,7 @@ async function main() {
         );
         await prisma.notification.create({
           data: {
-            userId: student.userId,
+            userId: student!.userId,
             type: NotificationType.PAYMENT,
             title: "Payment Successful",
             message: `Your payment of BDT 45,000 for invoice ${invoiceNumber} was received successfully.`,
@@ -1095,7 +1095,7 @@ async function main() {
           data: {
             transactionId: `TXN-${invoiceNumber}`,
             invoiceId: invoice.id,
-            studentId: student.profileId,
+            studentId: student!.profileId,
             amount: 45000,
             gateway: PaymentGateway.SSLCOMMERZ,
             status: PaymentStatus.FAILED,
@@ -1104,7 +1104,7 @@ async function main() {
         });
         paymentCount++;
         await logAudit(
-          student.userId,
+          student!.userId,
           AuditAction.UPDATE_PAYMENT_STATUS,
           "Payment",
           payment.id,
@@ -1112,7 +1112,7 @@ async function main() {
         );
         await prisma.notification.create({
           data: {
-            userId: student.userId,
+            userId: student!.userId,
             type: NotificationType.ERROR,
             title: "Payment Failed",
             message: `Your payment attempt for invoice ${invoiceNumber} failed. Please try again.`,
@@ -1121,7 +1121,7 @@ async function main() {
       } else {
         await prisma.notification.create({
           data: {
-            userId: student.userId,
+            userId: student!.userId,
             type: NotificationType.WARNING,
             title: "Fee Payment Due",
             message: `Invoice ${invoiceNumber} (BDT 45,000) is due on 2026-09-20.`,
@@ -1139,7 +1139,7 @@ async function main() {
     source: "seed",
   });
   for (const f of Object.values(facultyByEmpId)) {
-    await logAudit(f.userId, AuditAction.LOGIN, "User", f.userId, {
+    await logAudit(f!.userId, AuditAction.LOGIN, "User", f!.userId, {
       source: "seed",
     });
   }

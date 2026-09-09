@@ -7,6 +7,7 @@
     "dev": "npx tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "seed": "npx tsx src/seed.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
@@ -25,6 +26,7 @@
     "pg": "^8.23.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/node": "^26.4.1",
     "@types/pg": "^8.23.1",
