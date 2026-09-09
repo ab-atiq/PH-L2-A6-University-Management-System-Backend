@@ -19,7 +19,7 @@ import config from "./config";
 //     process.exit(1);
 //   });
 
-if (process.env.NODE_ENVIRONMENT === "development") {
+if (process.env.NODE_ENV === "development") {
   app.listen(config.port, () => {
     console.log(`Server is running on port ${config.port}`);
   });
