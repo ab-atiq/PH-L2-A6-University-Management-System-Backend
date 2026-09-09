@@ -49,10 +49,6 @@ app.get("/users", async (req: Request, res: Response) => {
     });
 });
 
-app.listen(config.port, () => {
-  console.log(`Example app listening on port ${config.port}`);
-});
-
 app.use(globalErrorHandler);
 app.use(notFound);
 
