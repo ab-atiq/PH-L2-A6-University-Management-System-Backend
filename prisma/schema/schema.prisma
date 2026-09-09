@@ -18,5 +18,4 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgres://b9f7961c65734f5cf002223d8493abe5675b0a78ccf1d7775195323fefea44f1:sk_HYDjCKwNYTEbb9vo64oy2@pooled.db.prisma.io:5432/postgres?sslmode=require"
 }

@@ -1,10 +1,30 @@
 import express from "express";
+import { prisma } from "../lib/prisma";
 
 const app = express();
 const port = 3000;
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
+});
+
+app.get("/check-users", (req, res) => {
+  res.json([
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Jane Doe" },
+  ]);
+});
+
+app.get("/users", async (req, res) => {
+  await prisma.user
+    .findMany()
+    .then((users) => {
+      res.json(users);
+    })
+    .catch((error) => {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    });
 });
 
 app.listen(port, () => {
