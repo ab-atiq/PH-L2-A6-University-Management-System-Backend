@@ -1,5 +1,5 @@
-import app from "./app";
-import config from "./config";
+import app from "./app.js";
+import config from "./config/index.js";
 // async function main() {
 //   await prisma.$connect();
 //   console.log("Connected to the database successfully.");

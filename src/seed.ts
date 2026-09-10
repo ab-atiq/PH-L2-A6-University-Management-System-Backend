@@ -46,9 +46,9 @@ import {
   SectionStatus,
   SemesterStatus,
   UserStatus,
-} from "../generated/prisma/client";
-import config from "./config";
-import { prisma } from "./lib/prisma";
+} from "../generated/prisma/client.js";
+import config from "./config/index.js";
+import { prisma } from "./lib/prisma.js";
 
 // use same prisma client in src/lib/prisma.ts and src/seed.ts to avoid multiple instances
 // import { PrismaPg } from "@prisma/adapter-pg";

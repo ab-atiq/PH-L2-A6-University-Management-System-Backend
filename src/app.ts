@@ -1,10 +1,10 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { type Request, type Response } from "express";
-import config from "./config";
-import { prisma } from "./lib/prisma";
-import { globalErrorHandler } from "./middleware/globalErrorHandler";
-import { notFound } from "./middleware/notFound";
+import config from "./config/index.js";
+import { prisma } from "./lib/prisma.js";
+import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
+import { notFound } from "./middleware/notFound.js";
 
 const app = express();
 
