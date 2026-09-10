@@ -6,12 +6,16 @@ import { prisma } from "./lib/prisma.js";
 import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
 import { notFound } from "./middleware/notFound.js";
 import { AttendanceRoutes } from "./module/attendance/attendance.route.js";
+import { AuditLogRoutes } from "./module/audit-log/audit-log.route.js";
 import { AuthRoutes } from "./module/auth/auth.route.js";
 import { CoursePrerequisiteRoutes } from "./module/course-prerequisite/course-prerequisite.route.js";
 import { CourseRoutes } from "./module/course/course.route.js";
 import { DepartmentRoutes } from "./module/department/department.route.js";
 import { EnrollmentRoutes } from "./module/enrollment/enrollment.route.js";
 import { ExamRoutes } from "./module/exam/exam.route.js";
+import { InvoiceRoutes } from "./module/invoice/invoice.route.js";
+import { NotificationRoutes } from "./module/notification/notification.route.js";
+import { PaymentRoutes } from "./module/payment/payment.route.js";
 import { ProgramRoutes } from "./module/program/program.route.js";
 import { ResultRoutes } from "./module/result/result.route.js";
 import { SectionFacultyRoutes } from "./module/section-faculty/section-faculty.route.js";
@@ -48,6 +52,10 @@ app.use("/api/v1/enrollments", EnrollmentRoutes);
 app.use("/api/v1/attendance", AttendanceRoutes);
 app.use("/api/v1/exams", ExamRoutes);
 app.use("/api/v1/results", ResultRoutes);
+app.use("/api/v1/invoices", InvoiceRoutes);
+app.use("/api/v1/payments", PaymentRoutes);
+app.use("/api/v1/notifications", NotificationRoutes);
+app.use("/api/v1/audit-logs", AuditLogRoutes);
 app.use("/api/v1/auth", AuthRoutes);
 
 app.get("/", (req: Request, res: Response) => {
