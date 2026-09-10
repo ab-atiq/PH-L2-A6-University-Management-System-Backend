@@ -56,22 +56,20 @@ export const auth = (...requiredRoles: Role[]) => {
     }
 
     const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-        email,
-        name,
-        role,
-      },
+      where: { id: userId },
     });
 
-    if (!user) {
+    if (!user || user.email !== email || user.role !== role || user.deletedAt) {
       throw new AppError(
         httpStatus.UNAUTHORIZED,
         "User not found. Please log in again.",
       );
     }
 
-    if (user.status === UserStatus.SUSPENDED) {
+    if (
+      user.status === UserStatus.SUSPENDED ||
+      user.status === UserStatus.INACTIVE
+    ) {
       throw new AppError(
         httpStatus.FORBIDDEN,
         "Your account has been suspended. Please contact support.",

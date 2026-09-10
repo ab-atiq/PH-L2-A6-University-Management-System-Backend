@@ -5,6 +5,8 @@ import config from "./config/index.js";
 import { prisma } from "./lib/prisma.js";
 import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
 import { notFound } from "./middleware/notFound.js";
+import { AuthRoutes } from "./module/auth/auth.route.js";
+import { UserRoutes } from "./module/user/user.route.js";
 
 const app = express();
 
@@ -21,6 +23,10 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cookieParser());
+
+app.use("/api/v1/users", UserRoutes);
+app.use("/api/v1/user", UserRoutes);
+app.use("/api/v1/auth", AuthRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
