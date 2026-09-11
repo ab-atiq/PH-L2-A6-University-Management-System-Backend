@@ -3,7 +3,6 @@ import httpStatus from "http-status";
 import { AppError } from "../../utils/AppError.js";
 import { catchAsync } from "../../utils/catchAsync.js";
 import { sendResponse } from "../../utils/sendResponse.js";
-import type { IRequestUser } from "./auth.interface.js";
 import { AuthService } from "./auth.service.js";
 
 const setAuthCookies = (
@@ -58,20 +57,21 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getMe = catchAsync(async (req: Request, res: Response) => {
-  if (!req.user)
-    throw new AppError(
-      httpStatus.UNAUTHORIZED,
-      "User information is missing in the request",
-    );
-  const result = await AuthService.getMe(req.user as IRequestUser);
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "User profile fetched successfully",
-    data: result,
-  });
-});
+// const getMe = catchAsync(async (req: Request, res: Response) => {
+//   if (!req.user) {
+//     throw new AppError(
+//       httpStatus.UNAUTHORIZED,
+//       "User information is missing in the request",
+//     );
+//   }
+//   const result = await AuthService.getMe(req.user as IRequestUser);
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "User profile fetched successfully",
+//     data: result,
+//   });
+// });
 
 const refreshToken = catchAsync(async (req: Request, res: Response) => {
   const token = req.cookies.refreshToken;
@@ -134,7 +134,6 @@ export const AuthController = {
   registerStudent,
   verifyStudentEmail,
   loginUser,
-  getMe,
   refreshToken,
   logout,
   googleLogin,

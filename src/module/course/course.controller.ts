@@ -1,1 +1,3 @@
-export { courseController as CourseController } from "../academic/academic.controller.js";
+import { crudController } from "../_shared/crud.controller.js";
+import { CourseService } from "./course.service.js";
+export const CourseController = crudController(CourseService);

@@ -14,7 +14,7 @@ router.post(
 );
 router.post(
   "/verify-email",
-  validateRequest(UserValidation.PatientEmailVerifyZodSchema),
+  validateRequest(UserValidation.EmailVerifyZodSchema),
   AuthController.verifyStudentEmail,
 );
 router.post(
@@ -22,12 +22,12 @@ router.post(
   validateRequest(UserValidation.LoginZodSchema),
   AuthController.loginUser,
 );
-router.get(
-  "/me",
-  auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
-  // validateRequest
-  AuthController.getMe,
-);
+// router.get(
+//   "/me",
+//   auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
+//   // validateRequest
+//   AuthController.getMe,
+// );
 router.post("/refresh-token", AuthController.refreshToken);
 router.post("/logout", AuthController.logout);
 router.post("/google", AuthController.googleLogin);

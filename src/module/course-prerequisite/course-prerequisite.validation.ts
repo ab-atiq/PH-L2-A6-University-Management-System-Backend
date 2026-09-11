@@ -1,1 +1,6 @@
-export { prerequisiteSchema as CoursePrerequisiteValidation } from "../academic/academic.validation.js";
+import z from "zod";
+const id = z.string().uuid();
+export const CoursePrerequisiteValidation = z.object({
+  courseId: id,
+  prerequisiteId: id,
+});

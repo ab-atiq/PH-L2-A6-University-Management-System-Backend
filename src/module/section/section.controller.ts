@@ -1,1 +1,3 @@
-export { sectionController as SectionController } from "../academic/academic.controller.js";
+import { crudController } from "../_shared/crud.controller.js";
+import { SectionService } from "./section.service.js";
+export const SectionController = crudController(SectionService);

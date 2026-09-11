@@ -18,7 +18,6 @@ import type {
   IGoogleLoginPayload,
   ILoginUserPayload,
   IRegisterStudentPayload,
-  IRequestUser,
   IResetPasswordPayload,
   IVerifyEmailPayload,
 } from "./auth.interface.js";
@@ -82,6 +81,7 @@ const createTokens = async (user: {
     config.jwt_refresh_secret,
     config.jwt_refresh_expires_in as SignOptions,
   );
+
   await prisma.refreshToken.create({
     data: {
       userId: user.id,
@@ -94,25 +94,30 @@ const createTokens = async (user: {
 
 const registerStudent = async (payload: IRegisterStudentPayload) => {
   const email = payload.email.trim().toLowerCase();
-  if (await prisma.user.findUnique({ where: { email } }))
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (user) {
     throw new AppError(
       httpStatus.CONFLICT,
       "User with this email already exists",
     );
+  }
+
   const passwordHash = await bcrypt.hash(
     payload.password,
-    Number(config.bcrypt_salt_rounds || 10),
+    Number(config.bcrypt_salt_rounds),
   );
   const otp = crypto.randomInt(100000, 1000000).toString();
   const key = `student-registration:${email}`;
+
   await ensureRedisConnection();
   await redisClient.set(
     key,
     JSON.stringify({ ...payload, email, passwordHash, otp }),
     { expiration: { type: "EX", value: OTP_TTL_SECONDS } },
   );
+
   const html = await ejs.renderFile(
-    path.join(process.cwd(), "src/templates/registration-user-otp.ejs"),
+    path.join(process.cwd(), "src/templates/registration-student-otp.ejs"),
     {
       name: `${payload.firstName} ${payload.lastName}`,
       email,
@@ -120,6 +125,7 @@ const registerStudent = async (payload: IRegisterStudentPayload) => {
       expirationMinutes: 5,
     },
   );
+
   await transporter.sendMail({
     from: config.email_sender,
     to: email,
@@ -131,6 +137,7 @@ const registerStudent = async (payload: IRegisterStudentPayload) => {
 const verifyStudentEmail = async (payload: IVerifyEmailPayload) => {
   const email = payload.email.trim().toLowerCase();
   const key = `student-registration:${email}`;
+
   await ensureRedisConnection();
   const rawRegistration = await redisClient.get(key);
   if (!rawRegistration)
@@ -138,6 +145,7 @@ const verifyStudentEmail = async (payload: IVerifyEmailPayload) => {
       httpStatus.BAD_REQUEST,
       "Verification code is invalid or expired",
     );
+
   const registration = JSON.parse(
     rawRegistration,
   ) as IRegisterStudentPayload & { passwordHash: string; otp: string };
@@ -146,6 +154,7 @@ const verifyStudentEmail = async (payload: IVerifyEmailPayload) => {
       httpStatus.BAD_REQUEST,
       "Verification code does not match",
     );
+
   const user = await prisma.user.create({
     data: {
       email,
@@ -165,14 +174,36 @@ const verifyStudentEmail = async (payload: IVerifyEmailPayload) => {
 
 const loginUser = async (payload: ILoginUserPayload) => {
   const email = payload.email.trim().toLowerCase();
+
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !user.passwordHash)
+  if (!user || !user.passwordHash) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid credentials");
-  if (!user.emailVerified || user.status === UserStatus.PENDING_VERIFICATION)
+  }
+  if (!user.emailVerified || user.status === UserStatus.PENDING_VERIFICATION) {
     throw new AppError(httpStatus.FORBIDDEN, "Please verify your email first");
+  }
+
+  // Ensure the user is active
   ensureActiveUser(user);
-  if (!(await bcrypt.compare(payload.password, user.passwordHash)))
+
+  if (!(await bcrypt.compare(payload.password, user.passwordHash))) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid credentials");
+  }
+
+  // at most 2 active refresh tokens per user. if there are already 2 refresh tokens then confirm from user that user want to delete previous all refresh token or stop create this refresh token before creating a new one.
+
+  // const activeTokens = await prisma.refreshToken.findMany({
+  //   where: { userId: user.id, revoked: false, expiresAt: { gt: new Date() } },
+  // });
+
+  // if (activeTokens.length >= 2) {
+  //   // Confirm from user before deleting existing refresh tokens
+  //   throw new AppError(
+  //     httpStatus.CONFLICT,
+  //     "You have reached the limit of active refresh tokens. Please revoke an existing token before creating a new one.",
+  //   );
+  // }
+
   await prisma.user.update({
     where: { id: user.id },
     data: { lastLoginAt: new Date() },
@@ -180,19 +211,23 @@ const loginUser = async (payload: ILoginUserPayload) => {
   return createTokens(user);
 };
 
-const getMe = async (requestUser: IRequestUser) => {
-  const user = await prisma.user.findUnique({
-    where: { id: requestUser.userId },
-    select: { ...publicUserSelect, studentProfile: true, facultyProfile: true },
-  });
-  if (!user) throw new AppError(httpStatus.NOT_FOUND, "User not found");
-  return user;
-};
+// const getMe = async (requestUser: IRequestUser) => {
+//   const user = await prisma.user.findUnique({
+//     where: { id: requestUser.userId },
+//     select: { ...publicUserSelect, studentProfile: true, facultyProfile: true },
+//   });
+//   if (!user) {
+//     throw new AppError(httpStatus.NOT_FOUND, "User not found");
+//   }
+//   return user;
+// };
 
 const refreshToken = async (token: string) => {
   const verified = jwtUtils.verifyToken(token, config.jwt_refresh_secret);
-  if (!verified.success || !verified.data)
+  if (!verified.success || !verified.data) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid refresh token");
+  }
+
   const storedToken = await prisma.refreshToken.findUnique({
     where: { tokenHash: hashToken(token) },
     include: { user: true },
@@ -201,12 +236,15 @@ const refreshToken = async (token: string) => {
     !storedToken ||
     storedToken.revoked ||
     storedToken.expiresAt <= new Date()
-  )
+  ) {
     throw new AppError(
       httpStatus.UNAUTHORIZED,
       "Refresh token is expired or revoked",
     );
+  }
+
   ensureActiveUser(storedToken.user);
+
   await prisma.refreshToken.update({
     where: { id: storedToken.id },
     data: { revoked: true, revokedAt: new Date() },
@@ -224,6 +262,7 @@ const logout = async (token?: string) => {
 
 const googleLogin = async (payload: IGoogleLoginPayload) => {
   let googlePayload: TokenPayload | undefined;
+
   try {
     googlePayload = (
       await googleClient.verifyIdToken({
@@ -237,18 +276,24 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
       "Invalid or expired Google ID token",
     );
   }
-  if (!googlePayload?.email || !googlePayload.sub)
+
+  if (!googlePayload?.email || !googlePayload.sub) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "Google account information is incomplete",
     );
+  }
+
   let user = await prisma.user.findUnique({
     where: { googleId: googlePayload.sub },
   });
-  if (!user)
+
+  if (!user) {
     user = await prisma.user.findUnique({
       where: { email: googlePayload.email.toLowerCase() },
     });
+  }
+
   if (user) {
     ensureActiveUser(user);
     if (!user.googleId)
@@ -279,13 +324,17 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
 const forgotPassword = async ({ email: rawEmail }: IForgotPasswordPayload) => {
   const email = rawEmail.trim().toLowerCase();
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
   ensureActiveUser(user);
-  if (user.googleId && !user.passwordHash)
+  if (user.googleId && !user.passwordHash) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "Google accounts cannot reset a password",
     );
+  }
+
   const otp = crypto.randomInt(100000, 1000000).toString();
   const key = `password-reset:${email}`;
   await ensureRedisConnection();
@@ -296,6 +345,7 @@ const forgotPassword = async ({ email: rawEmail }: IForgotPasswordPayload) => {
     path.join(process.cwd(), "src/templates/forgot-password.ejs"),
     { name: getDisplayName(user), otp, expirationMinutes: 5 },
   );
+
   await transporter.sendMail({
     from: config.email_sender,
     to: email,
@@ -310,13 +360,17 @@ const resetPassword = async ({
   newPassword,
 }: IResetPasswordPayload) => {
   const email = rawEmail.trim().toLowerCase();
+
   const key = `password-reset:${email}`;
   await ensureRedisConnection();
   const storedOtp = await redisClient.get(key);
-  if (!storedOtp || storedOtp !== otp)
+  if (!storedOtp || storedOtp !== otp) {
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid verification code");
+  }
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
   ensureActiveUser(user);
   await prisma.user.update({
     where: { id: user.id },
@@ -338,7 +392,6 @@ export const AuthService = {
   registerStudent,
   verifyStudentEmail,
   loginUser,
-  getMe,
   refreshToken,
   logout,
   googleLogin,

@@ -14,7 +14,8 @@ const StudentRegistrationZodSchema = z.object({
     .regex(/[^A-Za-z0-9]/, "Password must contain atleast 1 Special Character"),
   phone: z.string().min(7).max(20).optional(),
 });
-const PatientEmailVerifyZodSchema = z.object({
+
+const EmailVerifyZodSchema = z.object({
   email: z.email("Not email!!"),
   otp: z.string().length(6),
 });
@@ -50,7 +51,7 @@ const ResetPasswordZodSchema = z.object({
 
 export const UserValidation = {
   StudentRegistrationZodSchema,
-  PatientEmailVerifyZodSchema,
+  EmailVerifyZodSchema,
   LoginZodSchema,
   ForgotPasswordZodSchema,
   ResetPasswordZodSchema,

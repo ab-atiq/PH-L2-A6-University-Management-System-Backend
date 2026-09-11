@@ -1,1 +1,35 @@
-export { ProgramRoutes } from "../academic/academic.route.js";
+import { Router } from "express";
+import { Role } from "../../../generated/prisma/enums.js";
+import { auth } from "../../middleware/checkAuth.js";
+import { validateRequest } from "../../middleware/validateRequest.js";
+import { ProgramController } from "./program.controller.js";
+import {
+  ProgramListValidation,
+  ProgramValidation,
+} from "./program.validation.js";
+const router = Router();
+router.get(
+  "/",
+  auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
+  validateRequest(ProgramListValidation),
+  ProgramController.list,
+);
+router.get(
+  "/:id",
+  auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
+  ProgramController.get,
+);
+router.post(
+  "/",
+  auth(Role.ADMIN),
+  validateRequest(ProgramValidation),
+  ProgramController.create,
+);
+router.patch(
+  "/:id",
+  auth(Role.ADMIN),
+  validateRequest(ProgramValidation.partial()),
+  ProgramController.update,
+);
+router.delete("/:id", auth(Role.ADMIN), ProgramController.remove);
+export const ProgramRoutes = router;
