@@ -7,8 +7,14 @@ import { SectionFacultyValidation } from "./section-faculty.validation.js";
 
 const router = Router();
 
-router.post(
+router.get(
   "/",
+  auth(Role.FACULTY),
+  SectionFacultyController.getAllSectionInfoByFacultyWithFilter,
+);
+
+router.post(
+  "/:sectionId",
   auth(Role.ADMIN),
   validateRequest(SectionFacultyValidation),
   SectionFacultyController.assignFacultyToSection,

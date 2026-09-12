@@ -895,7 +895,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/sections/{{sectionId}}/assign-faculty",
+            "url": "{{baseUrl}}/section-faculty/{{sectionId}}",
             "description": "",
             "body": {
               "mode": "raw",
