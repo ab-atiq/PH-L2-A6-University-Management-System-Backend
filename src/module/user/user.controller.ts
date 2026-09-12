@@ -50,6 +50,7 @@ const uploadProfileImage = catchAsync(async (req: Request, res: Response) => {
     req.file?.buffer,
     userId!,
   );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

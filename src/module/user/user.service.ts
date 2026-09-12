@@ -31,7 +31,9 @@ const getMyProfile = async (userId: string) => {
     },
   });
 
-  if (!user) throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
   return user;
 };
 
@@ -43,7 +45,9 @@ const updateMyProfile = async (
     where: { id: userId },
     select: { id: true },
   });
-  if (!user) throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
 
   return prisma.user.update({
     where: { id: userId },
@@ -59,13 +63,29 @@ const updateMyProfile = async (
 };
 
 const uploadProfileImage = async (buffer: Buffer, userId: string) => {
+  // i want to delete previous image from cloudinary if it exists. then upload new image and update user record with new image url.
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { avatarUrl: true },
+  });
+
+  if (user?.avatarUrl) {
+    const publicId = user.avatarUrl.split("/").pop()?.split(".")[0];
+    if (publicId) {
+      await cloudinary.uploader.destroy(publicId);
+    }
+  }
+
   const cloudinaryResult = await new Promise<UploadApiResponse>(
     (resolve, reject) => {
       cloudinary.uploader
         .upload_stream({ resource_type: "auto" }, (error, result) => {
-          if (error) return reject(error);
-          if (!result)
+          if (error) {
+            return reject(error);
+          }
+          if (!result) {
             return reject(new Error("No result returned from Cloudinary"));
+          }
           resolve(result);
         })
         .end(buffer);
