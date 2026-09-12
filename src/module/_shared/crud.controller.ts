@@ -9,12 +9,14 @@ export const actor = (req: Request) => {
     throw new AppError(httpStatus.UNAUTHORIZED, "Authentication required");
   return req.user;
 };
+
 const ok = (
   res: Response,
   message: string,
   data: unknown,
   statusCode: number = httpStatus.OK,
 ) => sendResponse(res, { statusCode, success: true, message, data });
+
 export const crudController = (service: any) => ({
   list: catchAsync(async (req, res) =>
     ok(res, "Records fetched successfully", await service.list(req.query)),

@@ -39,7 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/v1/users", UserRoutes);
+// app.use("/api/v1/users", UserRoutes);
 app.use("/api/v1/user", UserRoutes);
 app.use("/api/v1/departments", DepartmentRoutes);
 app.use("/api/v1/programs", ProgramRoutes);

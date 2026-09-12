@@ -54,7 +54,7 @@ const uploadProfileImage = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "New tokens generated successfully",
+    message: "New profile image uploaded successfully",
     data: result,
   });
 });

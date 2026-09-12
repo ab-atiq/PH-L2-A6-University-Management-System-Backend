@@ -176,10 +176,19 @@ const loginUser = async (payload: ILoginUserPayload) => {
   const email = payload.email.trim().toLowerCase();
 
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !user.passwordHash) {
-    throw new AppError(httpStatus.UNAUTHORIZED, "Invalid credentials");
+  if (!user) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "User not found");
   }
+
+  if (!user.passwordHash) {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      "User does not have a password set. Please use Google login.",
+    );
+  }
+
   if (!user.emailVerified || user.status === UserStatus.PENDING_VERIFICATION) {
+    console.log("loginUser: Invalid credentials 2");
     throw new AppError(httpStatus.FORBIDDEN, "Please verify your email first");
   }
 
@@ -187,6 +196,7 @@ const loginUser = async (payload: ILoginUserPayload) => {
   ensureActiveUser(user);
 
   if (!(await bcrypt.compare(payload.password, user.passwordHash))) {
+    console.log("loginUser: Invalid credentials 3");
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid credentials");
   }
 

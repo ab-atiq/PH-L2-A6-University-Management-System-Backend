@@ -10,12 +10,14 @@ export const publicUser = {
   lastName: true,
   role: true,
 } as const;
+
 export const fail = (
   message: string,
   status: number = httpStatus.BAD_REQUEST,
 ): never => {
   throw new AppError(status, message);
 };
+
 export const audit = async (
   actorId: string | undefined,
   action: AuditAction,
@@ -31,6 +33,7 @@ export const audit = async (
     },
   });
 };
+
 export const pageResult = async (query: any, where: any, include?: any) => {
   const page = Number(query.page || 1);
   const limit = Math.min(Number(query.limit || 20), 100);
@@ -49,6 +52,7 @@ export const pageResult = async (query: any, where: any, include?: any) => {
     meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
   };
 };
+
 export const searchWhere = (query: any, fields: string[], extra: any = {}) => {
   const where: any = { deletedAt: null, ...extra };
   if (query.search)
@@ -58,16 +62,19 @@ export const searchWhere = (query: any, fields: string[], extra: any = {}) => {
   if (query.status) where.status = query.status;
   return where;
 };
+
 export const studentForUser = async (userId: string) => {
   const profile = await prisma.studentProfile.findUnique({ where: { userId } });
   if (!profile) fail("Student profile not found", httpStatus.NOT_FOUND);
   return profile!;
 };
+
 export const facultyForUser = async (userId: string) => {
   const profile = await prisma.facultyProfile.findUnique({ where: { userId } });
   if (!profile) fail("Faculty profile not found", httpStatus.NOT_FOUND);
   return profile!;
 };
+
 export const ensureFacultyAssignment = async (
   sectionId: string,
   userId: string,
