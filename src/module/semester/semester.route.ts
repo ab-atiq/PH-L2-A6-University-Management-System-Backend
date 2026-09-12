@@ -8,29 +8,36 @@ import {
   SemesterUpdateValidation,
   SemesterValidation,
 } from "./semester.validation.js";
+
 const router = Router();
+
 router.get(
   "/",
   auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
   validateRequest(SemesterListValidation),
-  SemesterController.list,
+  SemesterController.semesterList,
 );
+
 router.get(
   "/:id",
   auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
-  SemesterController.get,
+  SemesterController.getSingleSemester,
 );
+
 router.post(
   "/",
   auth(Role.ADMIN),
   validateRequest(SemesterValidation),
-  SemesterController.create,
+  SemesterController.createSemester,
 );
+
 router.patch(
   "/:id",
   auth(Role.ADMIN),
   validateRequest(SemesterUpdateValidation),
-  SemesterController.update,
+  SemesterController.updateSemester,
 );
-router.delete("/:id", auth(Role.ADMIN), SemesterController.remove);
+
+router.delete("/:id", auth(Role.ADMIN), SemesterController.removeSemester);
+
 export const SemesterRoutes = router;

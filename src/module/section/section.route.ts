@@ -7,29 +7,36 @@ import {
   SectionListValidation,
   SectionValidation,
 } from "./section.validation.js";
+
 const router = Router();
+
 router.get(
   "/",
   auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
   validateRequest(SectionListValidation),
-  SectionController.list,
+  SectionController.sectionList,
 );
+
 router.get(
   "/:id",
   auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
-  SectionController.get,
+  SectionController.getSingleSection,
 );
+
 router.post(
   "/",
   auth(Role.ADMIN),
   validateRequest(SectionValidation),
-  SectionController.create,
+  SectionController.createSection,
 );
+
 router.patch(
   "/:id",
   auth(Role.ADMIN),
   validateRequest(SectionValidation.partial()),
-  SectionController.update,
+  SectionController.updateSection,
 );
-router.delete("/:id", auth(Role.ADMIN), SectionController.remove);
+
+router.delete("/:id", auth(Role.ADMIN), SectionController.removeSection);
+
 export const SectionRoutes = router;

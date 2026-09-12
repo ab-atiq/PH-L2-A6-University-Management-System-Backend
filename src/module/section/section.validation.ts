@@ -4,7 +4,7 @@ export const SectionValidation = z.object({
   courseId: id,
   semesterId: id,
   sectionName: z.string().trim().min(1).max(30),
-  capacity: z.number().int().positive(),
+  capacity: z.coerce.number().int().positive(),
   room: z.string().trim().max(100).nullable().optional(),
   schedule: z.record(z.string(), z.unknown()).nullable().optional(),
   status: z.enum(["DRAFT", "PUBLISHED", "CLOSED", "CANCELLED"]).optional(),

@@ -4,16 +4,20 @@ import { auth } from "../../middleware/checkAuth.js";
 import { validateRequest } from "../../middleware/validateRequest.js";
 import { SectionFacultyController } from "./section-faculty.controller.js";
 import { SectionFacultyValidation } from "./section-faculty.validation.js";
+
 const router = Router();
+
 router.post(
   "/",
   auth(Role.ADMIN),
   validateRequest(SectionFacultyValidation),
-  SectionFacultyController.assign,
+  SectionFacultyController.assignFacultyToSection,
 );
+
 router.delete(
   "/:sectionId/:facultyId",
   auth(Role.ADMIN),
-  SectionFacultyController.remove,
+  SectionFacultyController.removeFacultyFromSection,
 );
+
 export const SectionFacultyRoutes = router;
