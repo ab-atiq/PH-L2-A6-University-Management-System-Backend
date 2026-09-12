@@ -7,29 +7,36 @@ import {
   ProgramListValidation,
   ProgramValidation,
 } from "./program.validation.js";
+
 const router = Router();
+
 router.get(
   "/",
   auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
   validateRequest(ProgramListValidation),
-  ProgramController.list,
+  ProgramController.programList,
 );
+
 router.get(
   "/:id",
   auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
-  ProgramController.get,
+  ProgramController.getSingleProgram,
 );
+
 router.post(
   "/",
   auth(Role.ADMIN),
   validateRequest(ProgramValidation),
-  ProgramController.create,
+  ProgramController.createNewProgram,
 );
+
 router.patch(
   "/:id",
   auth(Role.ADMIN),
   validateRequest(ProgramValidation.partial()),
-  ProgramController.update,
+  ProgramController.updateProgram,
 );
-router.delete("/:id", auth(Role.ADMIN), ProgramController.remove);
+
+router.delete("/:id", auth(Role.ADMIN), ProgramController.removeProgram);
+
 export const ProgramRoutes = router;

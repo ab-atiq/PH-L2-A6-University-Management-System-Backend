@@ -30,9 +30,27 @@ const departmentList = async (query: DepartmentListQuery) => {
     [query.sortBy || "createdAt"]: query.sortOrder || "desc",
   };
 
+  // const [data, total] = await Promise.all([
+  //   prisma.department.findMany({
+  //     where,
+  //     skip: (page - 1) * limit,
+  //     take: limit,
+  //     orderBy,
+  //   }),
+  //   prisma.department.count({ where }),
+  // ]);
+
   const [data, total] = await Promise.all([
     prisma.department.findMany({
       where,
+      select: {
+        id: true,
+        name: true,
+        code: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       skip: (page - 1) * limit,
       take: limit,
       orderBy,
