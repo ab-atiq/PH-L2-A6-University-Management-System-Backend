@@ -6,16 +6,24 @@ import { CoursePrerequisiteController } from "./course-prerequisite.controller.j
 import { CoursePrerequisiteValidation } from "./course-prerequisite.validation.js";
 
 const router = Router();
+
 router.post(
   "/",
   auth(Role.ADMIN),
   validateRequest(CoursePrerequisiteValidation),
-  CoursePrerequisiteController.add,
+  CoursePrerequisiteController.addPrerequisite,
 );
+
+router.get(
+  "/:courseId",
+  auth(Role.ADMIN, Role.FACULTY, Role.STUDENT),
+  CoursePrerequisiteController.getPrerequisites,
+);
+
 router.delete(
   "/:courseId/:prerequisiteId",
   auth(Role.ADMIN),
-  CoursePrerequisiteController.remove,
+  CoursePrerequisiteController.removePrerequisite,
 );
 
 export const CoursePrerequisiteRoutes = router;

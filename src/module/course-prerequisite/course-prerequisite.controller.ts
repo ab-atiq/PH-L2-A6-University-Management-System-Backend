@@ -1,33 +1,61 @@
-import type { Request } from "express";
+import type { Request, Response } from "express";
 import httpStatus from "http-status";
 import { AppError } from "../../utils/AppError.js";
 import { catchAsync } from "../../utils/catchAsync.js";
 import { sendResponse } from "../../utils/sendResponse.js";
 import { CoursePrerequisiteService } from "./course-prerequisite.service.js";
-const user = (req: Request) => {
-  if (!req.user)
+
+const getActorId = (req: Request) => {
+  if (!req.user) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Authentication required");
-  return req.user;
+  }
+  return req.user.userId;
 };
+
+const addPrerequisite = catchAsync(async (req: Request, res: Response) => {
+  const result = await CoursePrerequisiteService.addPrerequisite(
+    req.body,
+    getActorId(req),
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Prerequisite added successfully",
+    data: result,
+  });
+});
+
+const getPrerequisites = catchAsync(async (req: Request, res: Response) => {
+  const result = await CoursePrerequisiteService.getPrerequisites(
+    String(req.params.courseId),
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Prerequisites retrieved successfully",
+    data: result,
+  });
+});
+
+const removePrerequisite = catchAsync(async (req: Request, res: Response) => {
+  const result = await CoursePrerequisiteService.removePrerequisite(
+    String(req.params.courseId),
+    String(req.params.prerequisiteId),
+    getActorId(req),
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Prerequisite removed successfully",
+    data: result,
+  });
+});
+
 export const CoursePrerequisiteController = {
-  add: catchAsync(async (req, res) =>
-    sendResponse(res, {
-      statusCode: 201,
-      success: true,
-      message: "Prerequisite added successfully",
-      data: await CoursePrerequisiteService.add(req.body, user(req).userId),
-    }),
-  ),
-  remove: catchAsync(async (req, res) =>
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: "Prerequisite removed successfully",
-      data: await CoursePrerequisiteService.remove(
-        String(req.params.courseId),
-        String(req.params.prerequisiteId),
-        user(req).userId,
-      ),
-    }),
-  ),
+  addPrerequisite,
+  getPrerequisites,
+  removePrerequisite,
 };
