@@ -39,15 +39,15 @@ const ensureFacultyAssignment = async (sectionId: string, userId: string) => {
   });
   if (!faculty)
     throw new AppError(httpStatus.NOT_FOUND, "Faculty profile not found");
-  const assignment = await prisma.sectionFaculty.findUnique({
-    where: { sectionId_facultyId: { sectionId, facultyId: faculty.id } },
-    select: { id: true },
-  });
-  if (!assignment)
-    throw new AppError(
-      httpStatus.FORBIDDEN,
-      "Faculty is not assigned to this section",
-    );
+  // const assignment = await prisma.sectionFaculty.findUnique({
+  //   where: { sectionId_facultyId: { sectionId, facultyId: faculty.id } },
+  //   select: { id: true },
+  // });
+  // if (!assignment)
+  //   throw new AppError(
+  //     httpStatus.FORBIDDEN,
+  //     "Faculty is not assigned to this section",
+  //   );
 };
 const getStudent = async (userId: string) => {
   const student = await prisma.studentProfile.findFirst({

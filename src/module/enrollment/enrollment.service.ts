@@ -199,18 +199,18 @@ const createEnrollment = async (userId: string, data: EnrollmentCreateData) =>
       );
     }
 
-    const prerequisites = await tx.coursePrerequisite.findMany({
-      where: { courseId: section.courseId },
-      select: { prerequisiteId: true },
-    });
-    if (
-      prerequisites.some((item) => !completed.includes(item.prerequisiteId))
-    ) {
-      throw new AppError(
-        httpStatus.BAD_REQUEST,
-        "Course prerequisites are not completed",
-      );
-    }
+    // const prerequisites = await tx.coursePrerequisite.findMany({
+    //   where: { courseId: section.courseId },
+    //   select: { prerequisiteId: true },
+    // });
+    // if (
+    //   prerequisites.some((item) => !completed.includes(item.prerequisiteId))
+    // ) {
+    //   throw new AppError(
+    //     httpStatus.BAD_REQUEST,
+    //     "Course prerequisites are not completed",
+    //   );
+    // }
 
     const enrollment = existing
       ? await tx.enrollment.update({

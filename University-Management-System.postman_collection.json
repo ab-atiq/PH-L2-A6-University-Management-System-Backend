@@ -45,13 +45,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "register"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
             },
             "description": "Self-registration. Defaults to STUDENT role. Triggers an email-verification flow on the backend."
           },
@@ -92,13 +87,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/register",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "register"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
             },
             "description": "Self-registration. Defaults to STUDENT role. Triggers an email-verification flow on the backend."
           },
@@ -128,13 +118,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/verify-email",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "verify-email"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "verify-email"]
             },
             "description": "Self-registration. Defaults to STUDENT role. Triggers an email-verification flow on the backend."
           },
@@ -175,13 +160,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
             },
             "description": "Use any seeded demo account here (see collection description for credentials). Automatically saves accessToken/refreshToken/userId."
           },
@@ -222,13 +202,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "login"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
             },
             "description": "Use any seeded demo account here (see collection description for credentials). Automatically saves accessToken/refreshToken/userId."
           },
@@ -272,13 +247,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/refresh-token",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "refresh-token"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh-token"]
             }
           },
           "response": []
@@ -304,13 +274,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/logout",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "logout"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
             }
           },
           "response": []
@@ -331,13 +296,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/forgot-password",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "forgot-password"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "forgot-password"]
             }
           },
           "response": []
@@ -358,13 +318,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/auth/reset-password",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "reset-password"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "reset-password"]
             }
           },
           "response": []
@@ -379,13 +334,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/auth/google",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "google"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "google"]
             },
             "description": "Open this URL in a browser (not via Postman's Send button) to start the Google OAuth flow."
           },
@@ -401,14 +351,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/auth/google/callback?code=SAMPLE_CODE&state=SAMPLE_STATE",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "google",
-                "callback"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "google", "callback"],
               "query": [
                 {
                   "key": "code",
@@ -449,13 +393,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/user/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "me"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "me"]
             }
           },
           "response": []
@@ -481,13 +420,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/user/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "me"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "me"]
             }
           },
           "response": []
@@ -503,21 +437,14 @@
                 {
                   "key": "profileImage",
                   "type": "file",
-                  "src": [
-                    "/C:/Users/abulb/Downloads/fullstack.png"
-                  ]
+                  "src": ["/C:/Users/abulb/Downloads/fullstack.png"]
                 }
               ]
             },
             "url": {
               "raw": "{{baseUrl}}/user/profile-image",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "user",
-                "profile-image"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "profile-image"]
             }
           },
           "response": []
@@ -560,12 +487,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/students",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "students"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["students"]
             },
             "description": "Requires an ADMIN token. targetUserId must belong to an active STUDENT user."
           },
@@ -578,13 +501,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/students/{{studentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "students",
-                "{{studentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["students", "{{studentId}}"]
             },
             "description": "Uses the studentId value, for example STU2026001."
           },
@@ -611,13 +529,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/students/{{studentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "students",
-                "{{studentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["students", "{{studentId}}"]
             },
             "description": "Updates the profile identified by studentId."
           },
@@ -630,13 +543,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/students/{{studentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "students",
-                "{{studentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["students", "{{studentId}}"]
             },
             "description": "Soft-deletes the student profile."
           },
@@ -664,12 +572,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/faculty",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "faculty"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["faculty"]
             }
           },
           "response": []
@@ -690,13 +594,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/faculty/{{employeeId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "faculty",
-                "{{employeeId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["faculty", "{{employeeId}}"]
             }
           },
           "response": []
@@ -708,12 +607,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/faculty?search=bba",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "faculty"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["faculty"],
               "query": [
                 {
                   "key": "search",
@@ -731,13 +626,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/faculty/filter?designation=Associate Professor",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "faculty",
-                "filter"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["faculty", "filter"],
               "query": [
                 {
                   "key": "employeeId",
@@ -795,13 +685,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/faculty/{{employeeId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "faculty",
-                "{{employeeId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["faculty", "{{employeeId}}"]
             }
           },
           "response": []
@@ -813,13 +698,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/faculty/{{employeeId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "faculty",
-                "{{employeeId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["faculty", "{{employeeId}}"]
             }
           },
           "response": []
@@ -862,12 +742,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/departments",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "departments"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["departments"]
             }
           },
           "response": []
@@ -879,12 +755,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/departments?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "departments"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["departments"],
               "query": [
                 {
                   "key": "page",
@@ -922,12 +794,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/departments?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "departments"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["departments"],
               "query": [
                 {
                   "key": "page",
@@ -970,13 +838,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/departments/{{departmentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "departments",
-                "{{departmentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["departments", "{{departmentId}}"]
             }
           },
           "response": []
@@ -988,13 +851,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/departments/{{departmentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "departments",
-                "{{departmentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["departments", "{{departmentId}}"]
             }
           },
           "response": []
@@ -1020,13 +878,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/departments/{{departmentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "departments",
-                "{{departmentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["departments", "{{departmentId}}"]
             }
           },
           "response": []
@@ -1038,13 +891,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/departments/{{departmentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "departments",
-                "{{departmentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["departments", "{{departmentId}}"]
             }
           },
           "response": []
@@ -1087,12 +935,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/programs",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "programs"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["programs"]
             }
           },
           "response": []
@@ -1104,12 +948,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/programs?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "programs"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["programs"],
               "query": [
                 {
                   "key": "page",
@@ -1147,12 +987,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/programs?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "programs"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["programs"],
               "query": [
                 {
                   "key": "page",
@@ -1190,13 +1026,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/programs/{{programId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "programs",
-                "{{programId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["programs", "{{programId}}"]
             }
           },
           "response": []
@@ -1208,13 +1039,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/programs/{{programId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "programs",
-                "{{programId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["programs", "{{programId}}"]
             }
           },
           "response": []
@@ -1240,13 +1066,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/programs/{{programId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "programs",
-                "{{programId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["programs", "{{programId}}"]
             }
           },
           "response": []
@@ -1258,13 +1079,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/programs/{{programId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "programs",
-                "{{programId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["programs", "{{programId}}"]
             }
           },
           "response": []
@@ -1307,12 +1123,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/semesters",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "semesters"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["semesters"]
             }
           },
           "response": []
@@ -1324,12 +1136,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/semesters?page=1&limit=10&sortBy=startDate&sortOrder=desc&search=Fall 2026",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "semesters"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["semesters"],
               "query": [
                 {
                   "key": "page",
@@ -1363,12 +1171,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/semesters?page=1&limit=10&sortBy=startDate&sortOrder=desc&search=Fall 2026",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "semesters"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["semesters"],
               "query": [
                 {
                   "key": "page",
@@ -1402,13 +1206,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/semesters/{{semesterId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "semesters",
-                "{{semesterId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["semesters", "{{semesterId}}"]
             }
           },
           "response": []
@@ -1420,13 +1219,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/semesters/{{semesterId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "semesters",
-                "{{semesterId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["semesters", "{{semesterId}}"]
             }
           },
           "response": []
@@ -1452,13 +1246,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/semesters/{{semesterId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "semesters",
-                "{{semesterId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["semesters", "{{semesterId}}"]
             },
             "description": "Only one semester should be CURRENT at a time; backend enforces this rule."
           },
@@ -1485,13 +1274,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/semesters/{{semesterId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "semesters",
-                "{{semesterId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["semesters", "{{semesterId}}"]
             },
             "description": "Only one semester should be CURRENT at a time; backend enforces this rule."
           },
@@ -1535,12 +1319,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/courses",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "courses"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["courses"]
             }
           },
           "response": []
@@ -1552,12 +1332,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/courses?page=1&limit=10&status=PUBLISHED&sortBy=courseCode&sortOrder=asc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "courses"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["courses"],
               "query": [
                 {
                   "key": "page",
@@ -1596,12 +1372,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/courses?search=data%20structures",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "courses"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["courses"],
               "query": [
                 {
                   "key": "search",
@@ -1619,13 +1391,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/courses/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "courses",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "{{courseId}}"]
             }
           },
           "response": []
@@ -1651,13 +1418,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/courses/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "courses",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "{{courseId}}"]
             }
           },
           "response": []
@@ -1669,13 +1431,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/courses/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "courses",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "{{courseId}}"]
             }
           },
           "response": []
@@ -1707,12 +1464,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/course-prerequisites",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "course-prerequisites"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["course-prerequisites"]
             },
             "description": "prerequisiteCourseId should be the id of another Course that must be completed first."
           },
@@ -1725,13 +1478,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/course-prerequisites/{{courseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "course-prerequisites",
-                "{{courseId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["course-prerequisites", "{{courseId}}"]
             }
           },
           "response": []
@@ -1743,9 +1491,7 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/course-prerequisites/{{courseId}}/{{prerequisiteCourseId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "course-prerequisites",
                 "{{courseId}}",
@@ -1793,12 +1539,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections"]
             }
           },
           "response": []
@@ -1810,12 +1552,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/sections?page=1&limit=10&search=A&status=PUBLISHED&sortBy=createdAt&sortOrder=desc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["sections"],
               "query": [
                 {
                   "key": "page",
@@ -1853,12 +1591,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/sections?page=1&limit=10&search=A&status=PUBLISHED&sortBy=createdAt&sortOrder=desc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["sections"],
               "query": [
                 {
                   "key": "page",
@@ -1896,13 +1630,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/sections/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "{{sectionId}}"]
             }
           },
           "response": []
@@ -1914,13 +1643,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/sections/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "{{sectionId}}"]
             }
           },
           "response": []
@@ -1946,13 +1670,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/sections/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "{{sectionId}}"]
             }
           },
           "response": []
@@ -1964,13 +1683,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/sections/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["sections", "{{sectionId}}"]
             }
           },
           "response": []
@@ -1996,13 +1710,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/section-faculty/{{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "section-faculty",
-                "{{sectionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["section-faculty", "{{sectionId}}"]
             }
           },
           "response": []
@@ -2028,9 +1737,7 @@
             },
             "url": {
               "raw": "{{baseUrl}}/section-faculty/{{sectionId}}/{{facultyProfileId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "section-faculty",
                 "{{sectionId}}",
@@ -2047,12 +1754,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/section-faculty?page=1&limit=10",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "section-faculty"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["section-faculty"],
               "query": [
                 {
                   "key": "page",
@@ -2109,12 +1812,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/enrollments",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments"]
             },
             "description": "Backend transaction validates prerequisites, credit limit, duplicate enrollment, registration window, and section capacity."
           },
@@ -2127,12 +1826,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/enrollments?page=1&limit=10&status=ENROLLED&sortOrder=asc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments"],
               "query": [
                 {
                   "key": "page",
@@ -2163,13 +1858,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/enrollments/{{enrollmentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "{{enrollmentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{enrollmentId}}"]
             }
           },
           "response": []
@@ -2181,13 +1871,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/enrollments/{{enrollmentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "enrollments",
-                "{{enrollmentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{enrollmentId}}"]
             }
           },
           "response": []
@@ -2199,7 +1884,7 @@
       "name": "Attendance",
       "item": [
         {
-          "name": "Mark Attendance (Bulk)",
+          "name": "Mark Attendance",
           "request": {
             "method": "POST",
             "header": [
@@ -2210,7 +1895,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"sectionId\": \"{{sectionId}}\",\n  \"classDate\": \"2026-09-09\",\n  \"records\": [\n    {\n      \"studentId\": \"{{studentProfileId}}\",\n      \"status\": \"PRESENT\"\n    }\n  ]\n}",
+              "raw": "{\n  \"enrollmentId\": \"{{enrollmentId}}\",\n  \"classDate\": \"2026-09-09\",\n  \"status\": \"PRESENT\",\n  \"remarks\": null\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2218,79 +1903,23 @@
               }
             },
             "url": {
-              "raw": "{{baseUrl}}/attendance",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "attendance"
-              ]
+              "raw": "{{baseUrl}}/attendance/section/{{sectionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["attendance", "section", "{{sectionId}}"]
             },
-            "description": "Faculty can only mark attendance for sections they are assigned to. Duplicate student/date/section is rejected."
+            "description": "Faculty/admin mark one active enrollment at a time. The enrollment must belong to this section."
           },
           "response": []
         },
         {
-          "name": "Get My Attendance (Student)",
+          "name": "Get Section Attendance",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/attendance/my?page=1&limit=10&sectionId={{sectionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "attendance",
-                "my"
-              ],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "10"
-                },
-                {
-                  "key": "sectionId",
-                  "value": "{{sectionId}}"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get Section Attendance (Faculty/Admin)",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/sections/{{sectionId}}/attendance?page=1&limit=10&classDate=2026-09-09",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "sections",
-                "{{sectionId}}",
-                "attendance"
-              ],
-              "query": [
-                {
-                  "key": "page",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "10"
-                },
-                {
-                  "key": "classDate",
-                  "value": "2026-09-09"
-                }
-              ]
+              "raw": "{{baseUrl}}/attendance/section/{{sectionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["attendance", "section", "{{sectionId}}"]
             }
           },
           "response": []
@@ -2316,19 +1945,14 @@
             },
             "url": {
               "raw": "{{baseUrl}}/attendance/{{attendanceId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "attendance",
-                "{{attendanceId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["attendance", "{{attendanceId}}"]
             }
           },
           "response": []
         }
       ],
-      "description": "Attendance tracking per section and class date."
+      "description": "Attendance is listed by section. Students see only their own records; faculty must be assigned to the section."
     },
     {
       "name": "Exams",
@@ -2369,12 +1993,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/exams",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "exams"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["exams"]
             }
           },
           "response": []
@@ -2386,12 +2006,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/exams?page=1&limit=10&sectionId={{sectionId}}&status=PUBLISHED&sortBy=examDate&sortOrder=asc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "exams"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["exams"],
               "query": [
                 {
                   "key": "page",
@@ -2429,13 +2045,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/exams/{{examId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "exams",
-                "{{examId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["exams", "{{examId}}"]
             }
           },
           "response": []
@@ -2461,13 +2072,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/exams/{{examId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "exams",
-                "{{examId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["exams", "{{examId}}"]
             }
           },
           "response": []
@@ -2514,12 +2120,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/results",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "results"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["results"]
             },
             "description": "marksObtained must satisfy 0 <= marks <= exam.totalMarks."
           },
@@ -2546,13 +2148,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/results/{{resultId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "results",
-                "{{resultId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["results", "{{resultId}}"]
             }
           },
           "response": []
@@ -2564,13 +2161,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/results/my?page=1&limit=10&semesterId={{semesterId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "results",
-                "my"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["results", "my"],
               "query": [
                 {
                   "key": "page",
@@ -2596,14 +2188,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/exams/{{examId}}/results?page=1&limit=10",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "exams",
-                "{{examId}}",
-                "results"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["exams", "{{examId}}", "results"],
               "query": [
                 {
                   "key": "page",
@@ -2639,14 +2225,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/exams/{{examId}}/publish-results",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "exams",
-                "{{examId}}",
-                "publish-results"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["exams", "{{examId}}", "publish-results"]
             },
             "description": "Admin review/publish step. Students cannot see results until this is called."
           },
@@ -2665,13 +2245,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/transcripts/my",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "transcripts",
-                "my"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["transcripts", "my"]
             },
             "description": "Returns published results grouped by semester with semester GPA and cumulative GPA."
           },
@@ -2719,12 +2294,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/invoices",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "invoices"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["invoices"]
             }
           },
           "response": []
@@ -2736,13 +2307,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/invoices/my?page=1&limit=10&status=PENDING",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "invoices",
-                "my"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["invoices", "my"],
               "query": [
                 {
                   "key": "page",
@@ -2768,13 +2334,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/invoices/{{invoiceId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "invoices",
-                "{{invoiceId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["invoices", "{{invoiceId}}"]
             }
           },
           "response": []
@@ -2821,13 +2382,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/payments/initiate",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "initiate"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "initiate"]
             },
             "description": "Backend creates a real payment-gateway session and returns a redirect/session URL. Payment status is NOT set to success by the frontend."
           },
@@ -2857,13 +2413,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/payments/webhook",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "webhook"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "webhook"]
             },
             "description": "Simulates the gateway's server-to-server callback. In production this is called by Stripe/bKash/SSLCommerz directly, not by a client, and is verified via signature header."
           },
@@ -2876,13 +2427,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/payments/{{paymentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "payments",
-                "{{paymentId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["payments", "{{paymentId}}"]
             }
           },
           "response": []
@@ -2900,12 +2446,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/notifications?page=1&limit=10&isRead=false",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "notifications"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications"],
               "query": [
                 {
                   "key": "page",
@@ -2945,14 +2487,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/notifications/{{notificationId}}/read",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "notifications",
-                "{{notificationId}}",
-                "read"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["notifications", "{{notificationId}}", "read"]
             }
           },
           "response": []
@@ -2970,13 +2506,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/admin/dashboard-stats",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "admin",
-                "dashboard-stats"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "dashboard-stats"]
             }
           },
           "response": []
@@ -3002,15 +2533,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/admin/users/{{targetUserId}}/status",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "admin",
-                "users",
-                "{{targetUserId}}",
-                "status"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "{{targetUserId}}", "status"]
             }
           },
           "response": []
@@ -3022,12 +2546,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/departments?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "departments"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["departments"],
               "query": [
                 {
                   "key": "page",
@@ -3071,12 +2591,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/audit-logs?page=1&limit=10&search=&action=LOGIN&sortBy=createdAt&sortOrder=desc",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "audit-logs"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["audit-logs"],
               "query": [
                 {
                   "key": "page",
