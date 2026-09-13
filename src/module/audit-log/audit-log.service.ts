@@ -1,6 +1,7 @@
 import { prisma } from "../../lib/prisma.js";
+import type { AuditLogListQuery } from "./audit-log.interface.js";
 
-const list = async (query: any) => {
+const list = async (query: AuditLogListQuery) => {
   const page = Number(query.page || 1);
   const limit = Math.min(Number(query.limit || 20), 100);
   const where: any = {

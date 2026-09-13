@@ -22,6 +22,7 @@ import { ResultRoutes } from "./module/result/result.route.js";
 import { SectionFacultyRoutes } from "./module/section-faculty/section-faculty.route.js";
 import { SectionRoutes } from "./module/section/section.route.js";
 import { SemesterRoutes } from "./module/semester/semester.route.js";
+import { StudentRoutes } from "./module/student/student.route.js";
 import { UserRoutes } from "./module/user/user.route.js";
 
 const app = express();
@@ -47,6 +48,7 @@ app.use("/api/v1/programs", ProgramRoutes);
 app.use("/api/v1/courses", CourseRoutes);
 app.use("/api/v1/course-prerequisites", CoursePrerequisiteRoutes);
 app.use("/api/v1/semesters", SemesterRoutes);
+app.use("/api/v1/students", StudentRoutes);
 app.use("/api/v1/sections", SectionRoutes);
 app.use("/api/v1/section-faculty", SectionFacultyRoutes);
 app.use("/api/v1/faculty", FacultyRoutes);

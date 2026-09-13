@@ -1,8 +1,9 @@
 import httpStatus from "http-status";
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/AppError.js";
+import type { NotificationListQuery } from "./notification.interface.js";
 
-const listMine = async (userId: string, query: any) => {
+const listMine = async (userId: string, query: NotificationListQuery) => {
   const page = Number(query.page || 1);
   const limit = Math.min(Number(query.limit || 20), 100);
   const where = {

@@ -1,131 +1,32 @@
 {
   "info": {
-    "_postman_id": "e1a515ab-26e7-4240-a229-2fb694646303",
+    "_postman_id": "74cf6e29-66ac-4ed2-9427-8ca4ff47b677",
     "name": "University Management System API",
-    "description": "Full REST API collection for the University Management System backend (Node.js + Express + PostgreSQL + Prisma), matching /api/v1.\n\n## Getting started\n1. Set `baseUrl` (collection variable) to your running server, e.g. `http://localhost:5000/api/v1`.\n2. Run **Auth > Login** with a seeded demo account \u2014 this automatically stores `accessToken` / `refreshToken` / `userId` as collection variables.\n3. All other requests inherit Bearer auth from the collection automatically.\n4. Requests that create resources (Department, Program, Course, Semester, Section, Enrollment, Exam, Result, Invoice, Payment) automatically capture the new record's `id` into the matching collection variable (e.g. `departmentId`, `courseId`) so downstream requests referencing `{{id}}` work with no manual copy-pasting.\n\n## Demo credentials (from the seed script)\nAll seeded accounts share the password `Passw0rd!123`.\n- ADMIN: `admin@university.edu`\n- FACULTY: `rahim.uddin@university.edu` (and 4 more)\n- STUDENT: `arif.rahman@student.university.edu` (and 19 more)\n\n## Notes\n- Variables like `studentProfileId`, `facultyProfileId`, `prerequisiteCourseId`, `targetUserId`, `attendanceId`, `notificationId` are not auto-captured (they come from list endpoints or the seed data) \u2014 copy the relevant id from a GET response into the collection variable before running dependent requests.\n- The frontend/Postman never marks a payment as successful directly \u2014 only the `/payments/webhook` endpoint (called by the real gateway) does.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "description": "Full REST API collection for the University Management System backend (Node.js + Express + PostgreSQL + Prisma), matching /api/v1.\n\n## Getting started\n1. Set `baseUrl` (collection variable) to your running server, e.g. `http://localhost:5000/api/v1`.\n2. Run **Auth > Login** with a seeded demo account — this automatically stores `accessToken` / `refreshToken` / `userId` as collection variables.\n3. All other requests inherit Bearer auth from the collection automatically.\n4. Requests that create resources (Department, Program, Course, Semester, Section, Enrollment, Exam, Result, Invoice, Payment) automatically capture the new record's `id` into the matching collection variable (e.g. `departmentId`, `courseId`) so downstream requests referencing `{{id}}` work with no manual copy-pasting.\n\n## Demo credentials (from the seed script)\nAll seeded accounts share the password `Passw0rd!123`.\n- ADMIN: `admin@university.edu`\n- FACULTY: `rahim.uddin@university.edu` (and 4 more)\n- STUDENT: `arif.rahman@student.university.edu` (and 19 more)\n\n## Notes\n- Variables like `studentProfileId`, `facultyProfileId`, `prerequisiteCourseId`, `targetUserId`, `attendanceId`, `notificationId` are not auto-captured (they come from list endpoints or the seed data) — copy the relevant id from a GET response into the collection variable before running dependent requests.\n- The frontend/Postman never marks a payment as successful directly — only the `/payments/webhook` endpoint (called by the real gateway) does.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31131565"
   },
-  "auth": {
-    "type": "bearer",
-    "bearer": [
-      {
-        "key": "token",
-        "value": "{{accessToken}}",
-        "type": "string"
-      }
-    ]
-  },
-  "event": [],
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:5000/api/v1",
-      "type": "string"
-    },
-    {
-      "key": "accessToken",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "refreshToken",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "userId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "targetUserId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "departmentId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "programId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "courseId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "prerequisiteCourseId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "semesterId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "sectionId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "facultyProfileId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "studentProfileId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "enrollmentId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "attendanceId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "examId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "resultId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "invoiceId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "paymentId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "notificationId",
-      "value": "",
-      "type": "string"
-    }
-  ],
   "item": [
     {
-      "name": "Auth",
-      "description": "Authentication: register, login, refresh, logout, Google OAuth.",
+      "name": "1.Auth",
       "item": [
         {
           "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();\nif (res.success && res.data) {\n  if (res.data.accessToken) pm.collectionVariables.set('accessToken', res.data.accessToken);\n  if (res.data.refreshToken) pm.collectionVariables.set('refreshToken', res.data.refreshToken);\n  if (res.data.user && res.data.user.id) pm.collectionVariables.set('userId', res.data.user.id);\n}"
+                ]
+              }
+            }
+          ],
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
             "header": [
               {
@@ -133,85 +34,129 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/auth/register",
-            "description": "Self-registration. Defaults to STUDENT role. Triggers an email-verification flow on the backend.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"new.student@student.university.edu\",\n  \"password\": \"Passw0rd!123\",\n  \"firstName\": \"New\",\n  \"lastName\": \"Student\",\n  \"phone\": \"+8801700000000\"\n}",
+              "raw": "{\n//   \"email\": \"new.student@student.university.edu\",\n  \"email\": \"abulbasharatiqur@gmail.com\",\n  \"password\": \"Passw0rd!123\",\n  \"firstName\": \"New\",\n  \"lastName\": \"Student\",\n  \"phone\": \"+8801700000000\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
             },
-            "auth": {
-              "type": "noauth"
-            }
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Self-registration. Defaults to STUDENT role. Triggers an email-verification flow on the backend."
           },
-          "response": [],
+          "response": []
+        },
+        {
+          "name": "Register - Student",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data) {",
-                  "  if (res.data.accessToken) pm.collectionVariables.set('accessToken', res.data.accessToken);",
-                  "  if (res.data.refreshToken) pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
-                  "  if (res.data.user && res.data.user.id) pm.collectionVariables.set('userId', res.data.user.id);",
-                  "}"
+                  "const res = pm.response.json();\nif (res.success && res.data) {\n  if (res.data.accessToken) pm.collectionVariables.set('accessToken', res.data.accessToken);\n  if (res.data.refreshToken) pm.collectionVariables.set('refreshToken', res.data.refreshToken);\n  if (res.data.user && res.data.user.id) pm.collectionVariables.set('userId', res.data.user.id);\n}"
                 ]
               }
             }
-          ]
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n//   \"email\": \"new.student@student.university.edu\",\n  \"email\": \"cse1905004brur@gmail.com\",\n  \"password\": \"Passw0rd!123\",\n  \"firstName\": \"New\",\n  \"lastName\": \"Student\",\n  \"phone\": \"+8801700000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Self-registration. Defaults to STUDENT role. Triggers an email-verification flow on the backend."
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"cse1905004brur@gmail.com\",\n    \"otp\": \"258607\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/verify-email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "verify-email"
+              ]
+            },
+            "description": "Self-registration. Defaults to STUDENT role. Triggers an email-verification flow on the backend."
+          },
+          "response": []
         },
         {
           "name": "Login",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{baseUrl}}/auth/login",
-            "description": "Use any seeded demo account here (see collection description for credentials). Automatically saves accessToken/refreshToken/userId.",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@university.edu\",\n  \"password\": \"Passw0rd!123\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "auth": {
-              "type": "noauth"
-            }
-          },
-          "response": [],
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data) {",
-                  "  if (res.data.accessToken) pm.collectionVariables.set('accessToken', res.data.accessToken);",
-                  "  if (res.data.refreshToken) pm.collectionVariables.set('refreshToken', res.data.refreshToken);",
-                  "  if (res.data.user && res.data.user.id) pm.collectionVariables.set('userId', res.data.user.id);",
-                  "}"
+                  "const res = pm.response.json();\nif (res.success && res.data) {\n  if (res.data.accessToken) pm.collectionVariables.set('accessToken', res.data.accessToken);\n  if (res.data.refreshToken) pm.collectionVariables.set('refreshToken', res.data.refreshToken);\n  if (res.data.user && res.data.user.id) pm.collectionVariables.set('userId', res.data.user.id);\n}"
                 ]
               }
             }
-          ]
-        },
-        {
-          "name": "Refresh Token",
+          ],
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
             "header": [
               {
@@ -219,22 +164,78 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/auth/refresh-token",
-            "description": "",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "raw": "{\n  \"email\": \"cse1905004brur@gmail.com\",\n  \"password\": \"Passw0rd!123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
             },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Use any seeded demo account here (see collection description for credentials). Automatically saves accessToken/refreshToken/userId."
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();\nif (res.success && res.data) {\n  if (res.data.accessToken) pm.collectionVariables.set('accessToken', res.data.accessToken);\n  if (res.data.refreshToken) pm.collectionVariables.set('refreshToken', res.data.refreshToken);\n  if (res.data.user && res.data.user.id) pm.collectionVariables.set('userId', res.data.user.id);\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
             "auth": {
               "type": "noauth"
-            }
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@university.edu\",\n  \"password\": \"Passw0rd!Admin@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Use any seeded demo account here (see collection description for credentials). Automatically saves accessToken/refreshToken/userId."
           },
-          "response": [],
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
           "event": [
             {
               "listen": "test",
@@ -248,7 +249,39 @@
                 ]
               }
             }
-          ]
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "Logout",
@@ -260,8 +293,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/auth/logout",
-            "description": "",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
@@ -270,6 +301,70 @@
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"abulbasharatiqur@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/forgot-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "forgot-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"abulbasharatiqur@gmail.com\",\r\n  \"otp\": \"573079\",\r\n  \"newPassword\":\"abc123A#\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/reset-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "reset-password"
+              ]
             }
           },
           "response": []
@@ -277,42 +372,91 @@
         {
           "name": "Google OAuth - Start",
           "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{baseUrl}}/auth/google",
-            "description": "Open this URL in a browser (not via Postman's Send button) to start the Google OAuth flow.",
             "auth": {
               "type": "noauth"
-            }
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/google",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "google"
+              ]
+            },
+            "description": "Open this URL in a browser (not via Postman's Send button) to start the Google OAuth flow."
           },
           "response": []
         },
         {
           "name": "Google OAuth - Callback",
           "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{baseUrl}}/auth/google/callback?code=SAMPLE_CODE&state=SAMPLE_STATE",
-            "description": "Handled automatically by Google's redirect; included here for reference/documentation only.",
             "auth": {
               "type": "noauth"
-            }
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/google/callback?code=SAMPLE_CODE&state=SAMPLE_STATE",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "google",
+                "callback"
+              ],
+              "query": [
+                {
+                  "key": "code",
+                  "value": "SAMPLE_CODE"
+                },
+                {
+                  "key": "state",
+                  "value": "SAMPLE_STATE"
+                }
+              ]
+            },
+            "description": "Handled automatically by Google's redirect; included here for reference/documentation only."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Authentication: register, login, refresh, logout, Google OAuth."
     },
     {
-      "name": "Users / Profile",
-      "description": "Authenticated user's own profile.",
+      "name": "2.0-Users Profile (Student, Faculty, Admin)",
       "item": [
         {
           "name": "Get My Profile",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/users/me",
-            "description": ""
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "me"
+              ]
+            }
           },
           "response": []
         },
@@ -326,8 +470,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/users/me",
-            "description": "",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"firstName\": \"Updated\",\n  \"lastName\": \"Name\",\n  \"phone\": \"+8801711111111\"\n}",
@@ -336,18 +478,69 @@
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Profile Image",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "profileImage",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/abulb/Downloads/fullstack.png"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/profile-image",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "profile-image"
+              ]
             }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Authenticated user's own profile."
     },
     {
-      "name": "Departments",
-      "description": "Admin-managed academic departments. ADMIN role required for mutations.",
+      "name": "2.1-Student Profiles",
       "item": [
         {
-          "name": "Create Department",
+          "name": "Create Student Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();\nif (res.success && res.data && res.data.id) {\n  pm.collectionVariables.set('studentProfileId', res.data.id);\n  pm.collectionVariables.set('studentId', res.data.studentId);\n  console.log('Saved studentProfileId:', res.data.id);\n  console.log('Saved studentId:', res.data.studentId);\n}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -356,42 +549,417 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/departments",
-            "description": "",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Computer Science & Engineering\",\n  \"code\": \"CSE\",\n  \"description\": \"Department of Computer Science & Engineering\"\n}",
+              "raw": "{\n  \"userId\": \"{{targetUserId}}\",\n  \"studentId\": \"STU2026NEW001\",\n  \"departmentId\": \"{{departmentId}}\",\n  \"programId\": \"{{programId}}\",\n  \"currentSemesterId\": \"{{semesterId}}\",\n  \"batchYear\": 2026,\n  \"gender\": \"MALE\",\n  \"dateOfBirth\": \"2003-05-15\",\n  \"address\": \"Rajshahi, Bangladesh\",\n  \"guardianName\": \"Student Guardian\",\n  \"guardianPhone\": \"01700000001\",\n  \"admissionDate\": \"2026-01-10\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/students",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "students"
+              ]
+            },
+            "description": "Requires an ADMIN token. targetUserId must belong to an active STUDENT user."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Student Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "students",
+                "{{studentId}}"
+              ]
+            },
+            "description": "Uses the studentId value, for example STU2026001."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Student Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"departmentId\": \"{{departmentId}}\",\n  \"programId\": \"{{programId}}\",\n  \"currentSemesterId\": \"{{semesterId}}\",\n  \"address\": \"Updated address\",\n  \"guardianPhone\": \"01700000002\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "students",
+                "{{studentId}}"
+              ]
+            },
+            "description": "Updates the profile identified by studentId."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Student Profile",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/students/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "students",
+                "{{studentId}}"
+              ]
+            },
+            "description": "Soft-deletes the student profile."
+          },
+          "response": []
+        }
+      ],
+      "description": "Admin-managed student profile lifecycle. Create a profile after the student user verifies their email."
+    },
+    {
+      "name": "3.Faculty",
+      "item": [
+        {
+          "name": "Create Faculty Member - Admin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"employeeId\": \"EMP106\",\r\n  \"designation\": \"Pro. Assistant Professor\",\r\n  \"specialization\": \"Database Systems\",\r\n  \"departmentId\": \"{{departmentId}}\",\r\n  \"userId\": \"{{userId}}\",\r\n  \"joinDate\": \"2026-09-12\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/faculty",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faculty"
+              ]
             }
           },
-          "response": [],
+          "response": []
+        },
+        {
+          "name": "Update Faculty Member - Admin",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"employeeId\": \"EMP106-update\",\r\n  \"designation\": \"Pro. Assistant Professor - update\",\r\n  \"specialization\": \"Database Systems - update\",\r\n  \"joinDate\": \"2026-09-12\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/faculty/{{employeeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faculty",
+                "{{employeeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "All Faculty Search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/faculty?search=bba",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faculty"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "bba"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "All Faculty Filter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/faculty/filter?designation=Associate Professor",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faculty",
+                "filter"
+              ],
+              "query": [
+                {
+                  "key": "employeeId",
+                  "value": "EMP001",
+                  "disabled": true
+                },
+                {
+                  "key": "designation",
+                  "value": "Associate Professor"
+                },
+                {
+                  "key": "specialization",
+                  "value": "CSE Systems",
+                  "disabled": true
+                },
+                {
+                  "key": "firstName",
+                  "value": "Rahim",
+                  "disabled": true
+                },
+                {
+                  "key": "lastName",
+                  "value": "Uddin",
+                  "disabled": true
+                },
+                {
+                  "key": "email",
+                  "value": "rahim.uddin@university.edu",
+                  "disabled": true
+                },
+                {
+                  "key": "departmentName",
+                  "value": "Computer Science & Engineering",
+                  "disabled": true
+                },
+                {
+                  "key": "departmentCode",
+                  "value": "CSE",
+                  "disabled": true
+                },
+                {
+                  "key": "departmentId",
+                  "value": "978b041c-540f-4a16-aecb-955c0b9b3387",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Single Faculty Member",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/faculty/{{employeeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faculty",
+                "{{employeeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Faculty Member - Admin",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/faculty/{{employeeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "faculty",
+                "{{employeeId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Student course registration workflow (Workflow 2 in the requirements doc)."
+    },
+    {
+      "name": "3.Departments",
+      "item": [
+        {
+          "name": "Create Department - Admin",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data && res.data.id) {",
-                  "  pm.collectionVariables.set('departmentId', res.data.id);",
-                  "  console.log('Saved departmentId:', res.data.id);",
-                  "}"
+                  "const res = pm.response.json();\nif (res.success && res.data && res.data.id) {\n  pm.collectionVariables.set('departmentId', res.data.id);\n  console.log('Saved departmentId:', res.data.id);\n}"
                 ]
               }
             }
-          ]
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Computer Science & Engineering\",\n  \"code\": \"CSE-1\",\n  \"description\": \"Department of Computer Science & Engineering\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/departments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departments"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "List Departments",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/departments?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/departments?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departments"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Departments - Admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/departments?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departments"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                },
+                {
+                  "key": "deletedAt",
+                  "value": "true",
+                  "disabled": true
+                }
+              ]
+            }
           },
           "response": []
         },
@@ -400,13 +968,39 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/departments/{{departmentId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/departments/{{departmentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}"
+              ]
+            }
           },
           "response": []
         },
         {
-          "name": "Update Department",
+          "name": "Get Department by ID - Admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/departments/{{departmentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Department - Admin",
           "request": {
             "method": "PATCH",
             "header": [
@@ -415,8 +1009,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/departments/{{departmentId}}",
-            "description": "",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Computer Science & Engineering\",\n  \"description\": \"Updated description\"\n}",
@@ -425,28 +1017,57 @@
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/departments/{{departmentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}"
+              ]
             }
           },
           "response": []
         },
         {
-          "name": "Delete Department (Soft)",
+          "name": "Delete Department (Soft) - Admin",
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": "{{baseUrl}}/departments/{{departmentId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/departments/{{departmentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departments",
+                "{{departmentId}}"
+              ]
+            }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Admin-managed academic departments. ADMIN role required for mutations."
     },
     {
-      "name": "Programs",
-      "description": "Degree programs, each belonging to a department.",
+      "name": "4.Programs",
       "item": [
         {
-          "name": "Create Program",
+          "name": "Create Program - Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();\nif (res.success && res.data && res.data.id) {\n  pm.collectionVariables.set('programId', res.data.id);\n  console.log('Saved programId:', res.data.id);\n}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -455,42 +1076,110 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/programs",
-            "description": "",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"B.Sc. in Computer Science & Engineering\",\n  \"code\": \"BSC-CSE\",\n  \"departmentId\": \"{{departmentId}}\",\n  \"durationYears\": 4,\n  \"totalCredits\": 140\n}",
+              "raw": "{\n  \"name\": \"B.Sc. in Computer Science & Engineering\",\n  \"code\": \"BSC-CSE-Evening\",\n  \"departmentId\": \"{{departmentId}}\",\n  \"durationYears\": 4,\n  \"totalCredits\": 140\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/programs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programs"
+              ]
             }
           },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data && res.data.id) {",
-                  "  pm.collectionVariables.set('programId', res.data.id);",
-                  "  console.log('Saved programId:', res.data.id);",
-                  "}"
-                ]
-              }
-            }
-          ]
+          "response": []
         },
         {
           "name": "List Programs",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/programs?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/programs?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programs"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Programs - Admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/programs?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programs"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
           },
           "response": []
         },
@@ -499,13 +1188,39 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/programs/{{programId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/programs/{{programId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programs",
+                "{{programId}}"
+              ]
+            }
           },
           "response": []
         },
         {
-          "name": "Update Program",
+          "name": "Get Program by ID - Admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/programs/{{programId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programs",
+                "{{programId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Program - Admin",
           "request": {
             "method": "PATCH",
             "header": [
@@ -514,8 +1229,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/programs/{{programId}}",
-            "description": "",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"totalCredits\": 142\n}",
@@ -524,137 +1237,57 @@
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/programs/{{programId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programs",
+                "{{programId}}"
+              ]
             }
           },
           "response": []
         },
         {
-          "name": "Delete Program (Soft)",
+          "name": "Delete Program (Soft) - Admin",
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": "{{baseUrl}}/programs/{{programId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/programs/{{programId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programs",
+                "{{programId}}"
+              ]
+            }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Degree programs, each belonging to a department."
     },
     {
-      "name": "Courses",
-      "description": "Courses belong to a department and can define prerequisites and sections.",
+      "name": "5.Semesters",
       "item": [
         {
-          "name": "Create Course",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{baseUrl}}/courses",
-            "description": "",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"courseCode\": \"CSE401\",\n  \"title\": \"Software Engineering\",\n  \"description\": \"Principles of large-scale software design and development.\",\n  \"credits\": 3,\n  \"departmentId\": \"{{departmentId}}\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [],
+          "name": "Create Semester - admin",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data && res.data.id) {",
-                  "  pm.collectionVariables.set('courseId', res.data.id);",
-                  "  console.log('Saved courseId:', res.data.id);",
-                  "}"
+                  "const res = pm.response.json();\nif (res.success && res.data && res.data.id) {\n  pm.collectionVariables.set('semesterId', res.data.id);\n  console.log('Saved semesterId:', res.data.id);\n}"
                 ]
               }
             }
-          ]
-        },
-        {
-          "name": "List Courses",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{baseUrl}}/courses?page=1&limit=10&search=&status=PUBLISHED&sortBy=courseCode&sortOrder=asc",
-            "description": ""
-          },
-          "response": []
-        },
-        {
-          "name": "Search Courses",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{baseUrl}}/courses/search?q=data%20structures",
-            "description": ""
-          },
-          "response": []
-        },
-        {
-          "name": "Get Course by ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{baseUrl}}/courses/{{courseId}}",
-            "description": ""
-          },
-          "response": []
-        },
-        {
-          "name": "Update Course",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{baseUrl}}/courses/{{courseId}}",
-            "description": "",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Software Engineering & Design\",\n  \"status\": \"PUBLISHED\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete Course (Soft)",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": "{{baseUrl}}/courses/{{courseId}}",
-            "description": ""
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Course Prerequisites",
-      "description": "Manage prerequisite relationships between courses.",
-      "item": [
-        {
-          "name": "Add Prerequisite",
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -663,92 +1296,102 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/courses/{{courseId}}/prerequisites",
-            "description": "prerequisiteCourseId should be the id of another Course that must be completed first.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"prerequisiteId\": \"{{prerequisiteCourseId}}\"\n}",
+              "raw": "{\n  \"name\": \"Fall 2026-1\",\n  \"startDate\": \"2026-09-01\",\n  \"endDate\": \"2026-12-20\",\n  \"registrationStart\": \"2026-08-01\",\n  \"registrationEnd\": \"2026-08-25\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/semesters",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "semesters"
+              ]
             }
           },
           "response": []
-        },
-        {
-          "name": "List Prerequisites",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{baseUrl}}/courses/{{courseId}}/prerequisites",
-            "description": ""
-          },
-          "response": []
-        },
-        {
-          "name": "Remove Prerequisite",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": "{{baseUrl}}/courses/{{courseId}}/prerequisites/{{prerequisiteCourseId}}",
-            "description": ""
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Semesters",
-      "description": "Academic terms. Sections and enrollments are scoped to a semester.",
-      "item": [
-        {
-          "name": "Create Semester",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{baseUrl}}/semesters",
-            "description": "",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Fall 2026\",\n  \"startDate\": \"2026-09-01\",\n  \"endDate\": \"2026-12-20\",\n  \"registrationStart\": \"2026-08-01\",\n  \"registrationEnd\": \"2026-08-25\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data && res.data.id) {",
-                  "  pm.collectionVariables.set('semesterId', res.data.id);",
-                  "  console.log('Saved semesterId:', res.data.id);",
-                  "}"
-                ]
-              }
-            }
-          ]
         },
         {
           "name": "List Semesters",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/semesters?page=1&limit=10&sortBy=startDate&sortOrder=desc",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/semesters?page=1&limit=10&sortBy=startDate&sortOrder=desc&search=Fall 2026",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "semesters"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "startDate"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                },
+                {
+                  "key": "search",
+                  "value": "Fall 2026"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Semesters - admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/semesters?page=1&limit=10&sortBy=startDate&sortOrder=desc&search=Fall 2026",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "semesters"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "startDate"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                },
+                {
+                  "key": "search",
+                  "value": "Fall 2026"
+                }
+              ]
+            }
           },
           "response": []
         },
@@ -757,13 +1400,39 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/semesters/current",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/semesters/{{semesterId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "semesters",
+                "{{semesterId}}"
+              ]
+            }
           },
           "response": []
         },
         {
-          "name": "Update Semester",
+          "name": "Get Current Semester - admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/semesters/{{semesterId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "semesters",
+                "{{semesterId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Semester - admin",
           "request": {
             "method": "PATCH",
             "header": [
@@ -772,8 +1441,39 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/semesters/{{semesterId}}",
-            "description": "Only one semester should be CURRENT at a time; backend enforces this rule.",
+            "body": {
+              "mode": "raw",
+              "raw": "// {\n//   \"status\": \"CURRENT\"\n// }\n{\n    \"name\": \"Fall 2026-1\",\n    \"startDate\": \"2026-09-01\",\n    \"endDate\": \"2026-12-20\",\n    \"registrationStart\": \"2026-08-01\",\n    \"registrationEnd\": \"2026-08-25\",\n    \"status\": \"CURRENT\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/semesters/{{semesterId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "semesters",
+                "{{semesterId}}"
+              ]
+            },
+            "description": "Only one semester should be CURRENT at a time; backend enforces this rule."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Semester - admin",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"status\": \"CURRENT\"\n}",
@@ -782,18 +1482,40 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/semesters/{{semesterId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "semesters",
+                "{{semesterId}}"
+              ]
+            },
+            "description": "Only one semester should be CURRENT at a time; backend enforces this rule."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Academic terms. Sections and enrollments are scoped to a semester."
     },
     {
-      "name": "Sections",
-      "description": "A Section is a specific offering of a Course within a Semester, with capacity and a faculty assignment.",
+      "name": "6.1-Courses",
       "item": [
         {
-          "name": "Create Section",
+          "name": "Create Course - Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();\nif (res.success && res.data && res.data.id) {\n  pm.collectionVariables.set('courseId', res.data.id);\n  console.log('Saved courseId:', res.data.id);\n}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -802,57 +1524,114 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/sections",
-            "description": "",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"courseId\": \"{{courseId}}\",\n  \"semesterId\": \"{{semesterId}}\",\n  \"sectionName\": \"A\",\n  \"capacity\": 40,\n  \"room\": \"CSE-401\",\n  \"schedule\": {\n    \"days\": [\n      \"Monday\",\n      \"Wednesday\"\n    ],\n    \"startTime\": \"11:00\",\n    \"endTime\": \"12:30\"\n  }\n}",
+              "raw": "{\n  \"courseCode\": \"CSE4011\",\n  \"title\": \"Software Engineering\",\n  \"description\": \"Principles of large-scale software design and development.\",\n  \"credits\": 3,\n  \"departmentId\": \"{{departmentId}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses"
+              ]
             }
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "const res = pm.response.json();",
-                  "if (res.success && res.data && res.data.id) {",
-                  "  pm.collectionVariables.set('sectionId', res.data.id);",
-                  "  console.log('Saved sectionId:', res.data.id);",
-                  "}"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "List Sections",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{baseUrl}}/sections?page=1&limit=10&search=&status=PUBLISHED&sortBy=createdAt&sortOrder=desc",
-            "description": ""
           },
           "response": []
         },
         {
-          "name": "Get Section by ID",
+          "name": "List Courses",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/sections/{{sectionId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/courses?page=1&limit=10&status=PUBLISHED&sortBy=courseCode&sortOrder=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "data structures",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "PUBLISHED"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "courseCode"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                }
+              ]
+            }
           },
           "response": []
         },
         {
-          "name": "Update Section",
+          "name": "Search Courses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/courses?search=data%20structures",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "data%20structures"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses",
+                "{{courseId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Course - Admin",
           "request": {
             "method": "PATCH",
             "header": [
@@ -861,8 +1640,301 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/sections/{{sectionId}}",
-            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Software Engineering & Design\",\n  \"status\": \"PUBLISHED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses",
+                "{{courseId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Course (Soft) - Admin",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/courses/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "courses",
+                "{{courseId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Courses belong to a department and can define prerequisites and sections."
+    },
+    {
+      "name": "6.2-Course Prerequisites",
+      "item": [
+        {
+          "name": "Add Prerequisite - Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"courseId\": \"{{courseId}}\",\n    \"prerequisiteId\": \"{{prerequisiteCourseId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/course-prerequisites",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "course-prerequisites"
+              ]
+            },
+            "description": "prerequisiteCourseId should be the id of another Course that must be completed first."
+          },
+          "response": []
+        },
+        {
+          "name": "List Prerequisites",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/course-prerequisites/{{courseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "course-prerequisites",
+                "{{courseId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Prerequisite (Hard) - Admin",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/course-prerequisites/{{courseId}}/{{prerequisiteCourseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "course-prerequisites",
+                "{{courseId}}",
+                "{{prerequisiteCourseId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Manage prerequisite relationships between courses."
+    },
+    {
+      "name": "8.Sections",
+      "item": [
+        {
+          "name": "Create Section - admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();\nif (res.success && res.data && res.data.id) {\n  pm.collectionVariables.set('sectionId', res.data.id);\n  console.log('Saved sectionId:', res.data.id);\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": \"{{courseId}}\",\n  \"semesterId\": \"{{semesterId}}\",\n  \"sectionName\": \"A\",\n  \"capacity\": 40,\n  \"room\": \"CSE-401\",\n  \"schedule\": {\n    \"days\": [\n      \"Monday\",\n      \"Wednesday\"\n    ],\n    \"startTime\": \"11:00\",\n    \"endTime\": \"12:30\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Sections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sections?page=1&limit=10&search=A&status=PUBLISHED&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "A"
+                },
+                {
+                  "key": "status",
+                  "value": "PUBLISHED"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Sections - admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sections?page=1&limit=10&search=A&status=PUBLISHED&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "A"
+                },
+                {
+                  "key": "status",
+                  "value": "PUBLISHED"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Section by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sections/{{sectionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "{{sectionId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Section by ID - admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sections/{{sectionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "{{sectionId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Section - admin",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"capacity\": 45,\n  \"status\": \"PUBLISHED\"\n}",
@@ -871,22 +1943,40 @@
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sections/{{sectionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "{{sectionId}}"
+              ]
             }
           },
           "response": []
         },
         {
-          "name": "Delete Section (Soft)",
+          "name": "Delete Section (Soft) - admin",
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": "{{baseUrl}}/sections/{{sectionId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/sections/{{sectionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "{{sectionId}}"
+              ]
+            }
           },
           "response": []
         },
         {
-          "name": "Assign Faculty to Section",
+          "name": "Assign Faculty to Section - Admin",
           "request": {
             "method": "POST",
             "header": [
@@ -895,59 +1985,96 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/section-faculty/{{sectionId}}",
-            "description": "",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"facultyId\": \"{{facultyProfileId}}\",\n  \"isPrimary\": true\n}",
+              "raw": "{\n  \"facultyId\": \"{{facultyProfileId}}\",\n  \"isPrimary\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/section-faculty/{{sectionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "section-faculty",
+                "{{sectionId}}"
+              ]
             }
           },
           "response": []
         },
         {
-          "name": "Get My Sections (Faculty)",
+          "name": "Delete Faculty from Section - Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/section-faculty/{{sectionId}}/{{facultyProfileId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "section-faculty",
+                "{{sectionId}}",
+                "{{facultyProfileId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Sections - Faculty",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/faculty/my-sections?page=1&limit=10",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/section-faculty?page=1&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "section-faculty"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "A Section is a specific offering of a Course within a Semester, with capacity and a faculty assignment."
     },
     {
       "name": "Enrollments",
-      "description": "Student course registration workflow (Workflow 2 in the requirements doc).",
       "item": [
         {
           "name": "Register for a Section",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{baseUrl}}/enrollments",
-            "description": "Backend transaction validates prerequisites, credit limit, duplicate enrollment, registration window, and section capacity.",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"sectionId\": \"{{sectionId}}\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [],
           "event": [
             {
               "listen": "test",
@@ -962,15 +2089,70 @@
                 ]
               }
             }
-          ]
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectionId\": \"{{sectionId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/enrollments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "enrollments"
+              ]
+            },
+            "description": "Backend transaction validates prerequisites, credit limit, duplicate enrollment, registration window, and section capacity."
+          },
+          "response": []
         },
         {
           "name": "Get My Enrollments",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/enrollments/my?page=1&limit=10&status=ENROLLED",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/enrollments?page=1&limit=10&status=ENROLLED&sortOrder=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "enrollments"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "ENROLLED"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "description": "asc or desc"
+                }
+              ]
+            }
           },
           "response": []
         },
@@ -979,8 +2161,16 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/enrollments/{{enrollmentId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/{{enrollmentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "enrollments",
+                "{{enrollmentId}}"
+              ]
+            }
           },
           "response": []
         },
@@ -989,16 +2179,24 @@
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": "{{baseUrl}}/enrollments/{{enrollmentId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/{{enrollmentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "enrollments",
+                "{{enrollmentId}}"
+              ]
+            }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Student course registration workflow (Workflow 2 in the requirements doc)."
     },
     {
       "name": "Attendance",
-      "description": "Attendance tracking per section and class date.",
       "item": [
         {
           "name": "Mark Attendance (Bulk)",
@@ -1010,8 +2208,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/attendance",
-            "description": "Faculty can only mark attendance for sections they are assigned to. Duplicate student/date/section is rejected.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"sectionId\": \"{{sectionId}}\",\n  \"classDate\": \"2026-09-09\",\n  \"records\": [\n    {\n      \"studentId\": \"{{studentProfileId}}\",\n      \"status\": \"PRESENT\"\n    }\n  ]\n}",
@@ -1020,7 +2216,17 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/attendance",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "attendance"
+              ]
+            },
+            "description": "Faculty can only mark attendance for sections they are assigned to. Duplicate student/date/section is rejected."
           },
           "response": []
         },
@@ -1029,8 +2235,30 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/attendance/my?page=1&limit=10&sectionId={{sectionId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/attendance/my?page=1&limit=10&sectionId={{sectionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "attendance",
+                "my"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sectionId",
+                  "value": "{{sectionId}}"
+                }
+              ]
+            }
           },
           "response": []
         },
@@ -1039,8 +2267,31 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/sections/{{sectionId}}/attendance?page=1&limit=10&classDate=2026-09-09",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/sections/{{sectionId}}/attendance?page=1&limit=10&classDate=2026-09-09",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sections",
+                "{{sectionId}}",
+                "attendance"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "classDate",
+                  "value": "2026-09-09"
+                }
+              ]
+            }
           },
           "response": []
         },
@@ -1054,8 +2305,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/attendance/{{attendanceId}}",
-            "description": "",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"status\": \"LATE\",\n  \"remarks\": \"Arrived 10 minutes late\"\n}",
@@ -1064,39 +2313,28 @@
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/attendance/{{attendanceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "attendance",
+                "{{attendanceId}}"
+              ]
             }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Attendance tracking per section and class date."
     },
     {
       "name": "Exams",
-      "description": "Exams belong to a section and can be quizzes, midterms, finals, assignments, or projects.",
       "item": [
         {
           "name": "Create Exam",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{baseUrl}}/exams",
-            "description": "",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"sectionId\": \"{{sectionId}}\",\n  \"examType\": \"MIDTERM\",\n  \"title\": \"Midterm Examination\",\n  \"examDate\": \"2026-10-15\",\n  \"totalMarks\": 30,\n  \"weightage\": 40\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [],
           "event": [
             {
               "listen": "test",
@@ -1111,15 +2349,76 @@
                 ]
               }
             }
-          ]
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectionId\": \"{{sectionId}}\",\n  \"examType\": \"MIDTERM\",\n  \"title\": \"Midterm Examination\",\n  \"examDate\": \"2026-10-15\",\n  \"totalMarks\": 30,\n  \"weightage\": 40\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/exams",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams"
+              ]
+            }
+          },
+          "response": []
         },
         {
           "name": "List Exams",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/exams?page=1&limit=10&sectionId={{sectionId}}&status=PUBLISHED&sortBy=examDate&sortOrder=asc",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/exams?page=1&limit=10&sectionId={{sectionId}}&status=PUBLISHED&sortBy=examDate&sortOrder=asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sectionId",
+                  "value": "{{sectionId}}"
+                },
+                {
+                  "key": "status",
+                  "value": "PUBLISHED"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "examDate"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                }
+              ]
+            }
           },
           "response": []
         },
@@ -1128,8 +2427,16 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/exams/{{examId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/exams/{{examId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams",
+                "{{examId}}"
+              ]
+            }
           },
           "response": []
         },
@@ -1143,8 +2450,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/exams/{{examId}}",
-            "description": "",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"examDate\": \"2026-10-18\",\n  \"status\": \"PUBLISHED\"\n}",
@@ -1153,39 +2458,28 @@
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/exams/{{examId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams",
+                "{{examId}}"
+              ]
             }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Exams belong to a section and can be quizzes, midterms, finals, assignments, or projects."
     },
     {
       "name": "Results",
-      "description": "Marks entry, grading, and result publication workflow (Workflow 6).",
       "item": [
         {
           "name": "Enter Result",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{baseUrl}}/results",
-            "description": "marksObtained must satisfy 0 <= marks <= exam.totalMarks.",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"examId\": \"{{examId}}\",\n  \"studentId\": \"{{studentProfileId}}\",\n  \"enrollmentId\": \"{{enrollmentId}}\",\n  \"marksObtained\": 25\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [],
           "event": [
             {
               "listen": "test",
@@ -1200,7 +2494,36 @@
                 ]
               }
             }
-          ]
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"examId\": \"{{examId}}\",\n  \"studentId\": \"{{studentProfileId}}\",\n  \"enrollmentId\": \"{{enrollmentId}}\",\n  \"marksObtained\": 25\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/results",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "results"
+              ]
+            },
+            "description": "marksObtained must satisfy 0 <= marks <= exam.totalMarks."
+          },
+          "response": []
         },
         {
           "name": "Update Result",
@@ -1212,8 +2535,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/results/{{resultId}}",
-            "description": "",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"marksObtained\": 27\n}",
@@ -1222,6 +2543,16 @@
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/results/{{resultId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "results",
+                "{{resultId}}"
+              ]
             }
           },
           "response": []
@@ -1231,8 +2562,30 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/results/my?page=1&limit=10&semesterId={{semesterId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/results/my?page=1&limit=10&semesterId={{semesterId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "results",
+                "my"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "semesterId",
+                  "value": "{{semesterId}}"
+                }
+              ]
+            }
           },
           "response": []
         },
@@ -1241,8 +2594,27 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/exams/{{examId}}/results?page=1&limit=10",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/exams/{{examId}}/results?page=1&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams",
+                "{{examId}}",
+                "results"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
           },
           "response": []
         },
@@ -1256,8 +2628,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/exams/{{examId}}/publish-results",
-            "description": "Admin review/publish step. Students cannot see results until this is called.",
             "body": {
               "mode": "raw",
               "raw": "{}",
@@ -1266,55 +2636,55 @@
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/exams/{{examId}}/publish-results",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "exams",
+                "{{examId}}",
+                "publish-results"
+              ]
+            },
+            "description": "Admin review/publish step. Students cannot see results until this is called."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Marks entry, grading, and result publication workflow (Workflow 6)."
     },
     {
       "name": "Transcripts",
-      "description": "Official academic history and GPA calculation (Workflows 7 & 8).",
       "item": [
         {
           "name": "Get My Transcript",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/transcripts/my",
+            "url": {
+              "raw": "{{baseUrl}}/transcripts/my",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transcripts",
+                "my"
+              ]
+            },
             "description": "Returns published results grouped by semester with semester GPA and cumulative GPA."
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Official academic history and GPA calculation (Workflows 7 & 8)."
     },
     {
       "name": "Invoices",
-      "description": "University fee invoices (ADMIN creates, STUDENT views and pays).",
       "item": [
         {
           "name": "Create Invoice",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": "{{baseUrl}}/invoices",
-            "description": "",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"studentId\": \"{{studentProfileId}}\",\n  \"semesterId\": \"{{semesterId}}\",\n  \"description\": \"Fall 2026 Tuition & Fees\",\n  \"amount\": 45000,\n  \"dueDate\": \"2026-09-20\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [],
           "event": [
             {
               "listen": "test",
@@ -1329,36 +2699,7 @@
                 ]
               }
             }
-          ]
-        },
-        {
-          "name": "Get My Invoices (Student)",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{baseUrl}}/invoices/my?page=1&limit=10&status=PENDING",
-            "description": ""
-          },
-          "response": []
-        },
-        {
-          "name": "Get Invoice by ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{baseUrl}}/invoices/{{invoiceId}}",
-            "description": ""
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Payments",
-      "description": "Real payment gateway integration: session creation, webhook verification, status lookup.",
-      "item": [
-        {
-          "name": "Initiate Payment",
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -1367,19 +2708,85 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/payments/initiate",
-            "description": "Backend creates a real payment-gateway session and returns a redirect/session URL. Payment status is NOT set to success by the frontend.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"invoiceId\": \"{{invoiceId}}\",\n  \"gateway\": \"STRIPE\"\n}",
+              "raw": "{\n  \"studentId\": \"{{studentProfileId}}\",\n  \"semesterId\": \"{{semesterId}}\",\n  \"description\": \"Fall 2026 Tuition & Fees\",\n  \"amount\": 45000,\n  \"dueDate\": \"2026-09-20\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/invoices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "invoices"
+              ]
             }
           },
-          "response": [],
+          "response": []
+        },
+        {
+          "name": "Get My Invoices (Student)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/invoices/my?page=1&limit=10&status=PENDING",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "invoices",
+                "my"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "status",
+                  "value": "PENDING"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Invoice by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/invoices/{{invoiceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "invoices",
+                "{{invoiceId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "University fee invoices (ADMIN creates, STUDENT views and pays)."
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Initiate Payment",
           "event": [
             {
               "listen": "test",
@@ -1394,10 +2801,7 @@
                 ]
               }
             }
-          ]
-        },
-        {
-          "name": "Payment Gateway Webhook",
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -1406,8 +2810,42 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/payments/webhook",
-            "description": "Simulates the gateway's server-to-server callback. In production this is called by Stripe/bKash/SSLCommerz directly, not by a client, and is verified via signature header.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"invoiceId\": \"{{invoiceId}}\",\n  \"gateway\": \"STRIPE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/initiate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "initiate"
+              ]
+            },
+            "description": "Backend creates a real payment-gateway session and returns a redirect/session URL. Payment status is NOT set to success by the frontend."
+          },
+          "response": []
+        },
+        {
+          "name": "Payment Gateway Webhook",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"transactionId\": \"TXN-SAMPLE-0001\",\n  \"status\": \"SUCCESS\",\n  \"gatewayReference\": \"ref_sample_from_gateway\"\n}",
@@ -1417,9 +2855,17 @@
                 }
               }
             },
-            "auth": {
-              "type": "noauth"
-            }
+            "url": {
+              "raw": "{{baseUrl}}/payments/webhook",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "webhook"
+              ]
+            },
+            "description": "Simulates the gateway's server-to-server callback. In production this is called by Stripe/bKash/SSLCommerz directly, not by a client, and is verified via signature header."
           },
           "response": []
         },
@@ -1428,24 +2874,53 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/payments/{{paymentId}}",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/payments/{{paymentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "{{paymentId}}"
+              ]
+            }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Real payment gateway integration: session creation, webhook verification, status lookup."
     },
     {
       "name": "Notifications",
-      "description": "In-app notifications for the authenticated user.",
       "item": [
         {
           "name": "List My Notifications",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/notifications?page=1&limit=10&isRead=false",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/notifications?page=1&limit=10&isRead=false",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "isRead",
+                  "value": "false"
+                }
+              ]
+            }
           },
           "response": []
         },
@@ -1459,8 +2934,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/notifications/{{notificationId}}/read",
-            "description": "",
             "body": {
               "mode": "raw",
               "raw": "{}",
@@ -1469,33 +2942,42 @@
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/notifications/{{notificationId}}/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "notifications",
+                "{{notificationId}}",
+                "read"
+              ]
             }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "In-app notifications for the authenticated user."
     },
     {
       "name": "Admin",
-      "description": "University-wide management, reporting, and analytics. ADMIN role required for all endpoints.",
       "item": [
         {
           "name": "Dashboard Stats",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/admin/dashboard-stats",
-            "description": ""
-          },
-          "response": []
-        },
-        {
-          "name": "List All Users",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{baseUrl}}/admin/users?page=1&limit=10&search=&role=STUDENT&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/admin/dashboard-stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard-stats"
+              ]
+            }
           },
           "response": []
         },
@@ -1509,8 +2991,6 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/admin/users/{{targetUserId}}/status",
-            "description": "",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"status\": \"SUSPENDED\"\n}",
@@ -1519,27 +2999,220 @@
                   "language": "json"
                 }
               }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{targetUserId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{{targetUserId}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Departments Copy",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/departments?page=1&limit=10&search=&status=ACTIVE&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departments"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
             }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "University-wide management, reporting, and analytics. ADMIN role required for all endpoints."
     },
     {
       "name": "Audit Logs",
-      "description": "System-wide audit trail. ADMIN-only.",
       "item": [
         {
           "name": "List Audit Logs",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/audit-logs?page=1&limit=10&search=&action=LOGIN&sortBy=createdAt&sortOrder=desc",
-            "description": ""
+            "url": {
+              "raw": "{{baseUrl}}/audit-logs?page=1&limit=10&search=&action=LOGIN&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "audit-logs"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "action",
+                  "value": "LOGIN"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
           },
           "response": []
         }
-      ]
+      ],
+      "description": "System-wide audit trail. ADMIN-only."
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1"
+    },
+    {
+      "key": "email",
+      "value": ""
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "targetUserId",
+      "value": ""
+    },
+    {
+      "key": "departmentId",
+      "value": ""
+    },
+    {
+      "key": "programId",
+      "value": ""
+    },
+    {
+      "key": "courseId",
+      "value": ""
+    },
+    {
+      "key": "prerequisiteCourseId",
+      "value": ""
+    },
+    {
+      "key": "semesterId",
+      "value": ""
+    },
+    {
+      "key": "sectionId",
+      "value": ""
+    },
+    {
+      "key": "facultyProfileId",
+      "value": ""
+    },
+    {
+      "key": "studentProfileId",
+      "value": ""
+    },
+    {
+      "key": "enrollmentId",
+      "value": ""
+    },
+    {
+      "key": "attendanceId",
+      "value": ""
+    },
+    {
+      "key": "examId",
+      "value": ""
+    },
+    {
+      "key": "resultId",
+      "value": ""
+    },
+    {
+      "key": "invoiceId",
+      "value": ""
+    },
+    {
+      "key": "paymentId",
+      "value": ""
+    },
+    {
+      "key": "notificationId",
+      "value": ""
+    },
+    {
+      "key": "employeeId",
+      "value": ""
+    },
+    {
+      "key": "studentId",
+      "value": ""
     }
   ]
 }

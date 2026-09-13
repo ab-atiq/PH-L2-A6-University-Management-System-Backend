@@ -10,6 +10,7 @@ import {
 import config from "../../config/index.js";
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/AppError.js";
+import type { InitiatePaymentData } from "./payment.interface.js";
 
 const createBkashPayment = async (transactionId: string, amount: string) => {
   if (!config.bkash_base_url || !config.bkash_username || !config.bkash_app_key)
@@ -65,10 +66,7 @@ const createBkashPayment = async (transactionId: string, amount: string) => {
   return (await response.json()) as Record<string, unknown>;
 };
 
-const initiate = async (
-  userId: string,
-  data: { invoiceId: string; gateway: PaymentGateway },
-) => {
+const initiate = async (userId: string, data: InitiatePaymentData) => {
   const student = await prisma.studentProfile.findUnique({ where: { userId } });
   if (!student)
     throw new AppError(httpStatus.NOT_FOUND, "Student profile not found");
@@ -207,6 +205,8 @@ const getById = async (userId: string, role: Role, id: string) => {
     role === Role.STUDENT
       ? await prisma.studentProfile.findUnique({ where: { userId } })
       : null;
+  if (role === Role.STUDENT && !student)
+    throw new AppError(httpStatus.NOT_FOUND, "Student profile not found");
   const payment = await prisma.payment.findFirst({
     where: {
       id,
