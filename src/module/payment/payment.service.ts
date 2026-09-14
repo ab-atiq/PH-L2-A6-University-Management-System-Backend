@@ -1,5 +1,7 @@
 import crypto from "crypto";
 import httpStatus from "http-status";
+import Stripe from "stripe";
+import type { PaymentStatus as PaymentStatusType } from "../../../generated/prisma/enums.js";
 import {
   AuditAction,
   InvoiceStatus,
@@ -8,18 +10,345 @@ import {
   Role,
 } from "../../../generated/prisma/enums.js";
 import config from "../../config/index.js";
+import { getBkashIdToken } from "../../lib/bkash.js";
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../utils/AppError.js";
 import type { InitiatePaymentData } from "./payment.interface.js";
 
-const createBkashPayment = async (transactionId: string, amount: string) => {
+const getStripe = () => {
+  if (!config.stripe_secret_key) {
+    throw new AppError(
+      httpStatus.SERVICE_UNAVAILABLE,
+      "Stripe is not configured",
+    );
+  }
+  return new Stripe(config.stripe_secret_key);
+};
+
+const getCheckoutUrl = (path: string) => {
+  const baseUrl =
+    config.backend_url ?? `http://localhost:${config.port ?? 5000}`;
+  return `${baseUrl.replace(/\/$/, "")}${path}`;
+};
+
+const createCheckoutSession = async (userId: string, invoiceId: string) => {
+  const student = await prisma.studentProfile.findUnique({ where: { userId } });
+  if (!student) {
+    throw new AppError(httpStatus.NOT_FOUND, "Student profile not found");
+  }
+
+  const invoice = await prisma.feeInvoice.findFirst({
+    where: { id: invoiceId, studentId: student.id, deletedAt: null },
+    include: {
+      payments: {
+        where: { deletedAt: null },
+        orderBy: { createdAt: "desc" },
+      },
+    },
+  });
+  if (!invoice) throw new AppError(httpStatus.NOT_FOUND, "Invoice not found");
+  if (
+    invoice.status === InvoiceStatus.PAID ||
+    invoice.payments.some((payment) => payment.status === PaymentStatus.SUCCESS)
+  ) {
+    throw new AppError(httpStatus.CONFLICT, "Invoice is already paid");
+  }
+  if (invoice.status === InvoiceStatus.CANCELLED) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invoice is cancelled");
+  }
+  if (new Date() > invoice.dueDate) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invoice is past due");
+  }
+  if (
+    invoice.payments.some(
+      (payment) =>
+        payment.status === PaymentStatus.INITIATED ||
+        payment.status === PaymentStatus.PENDING,
+    )
+  ) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "A payment is already in progress for this invoice",
+    );
+  }
+
+  const stripe = getStripe();
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price_data: {
+          currency: "usd",
+          unit_amount: Math.round(Number(invoice.amount) * 100),
+          product_data: { name: `University invoice ${invoice.invoiceNumber}` },
+        },
+        quantity: 1,
+      },
+    ],
+    success_url: `${getCheckoutUrl("/api/v1/payments/success")}?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${getCheckoutUrl("/api/v1/payments/cancel")}?session_id={CHECKOUT_SESSION_ID}`,
+    metadata: { invoiceId: invoice.id, studentId: student.id },
+  });
+
+  const payment = await prisma.payment.create({
+    data: {
+      transactionId: session.id,
+      invoiceId: invoice.id,
+      studentId: student.id,
+      amount: invoice.amount,
+      gateway: PaymentGateway.STRIPE,
+      status: PaymentStatus.PENDING,
+    },
+  });
+
+  return { paymentUrl: session.url, payment };
+};
+
+const updateCheckoutPayment = async (
+  sessionId: string,
+  status: PaymentStatusType,
+) => {
+  const payment = await prisma.payment.findUnique({
+    where: { transactionId: sessionId },
+    include: { invoice: true },
+  });
+  if (!payment) throw new AppError(httpStatus.NOT_FOUND, "Payment not found");
+  if (payment.status === PaymentStatus.SUCCESS) return payment;
+  if (
+    status === PaymentStatus.SUCCESS &&
+    payment.amount.toString() !== payment.invoice.amount.toString()
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Payment amount does not match invoice",
+    );
+  }
+
+  return prisma.$transaction(async (tx) => {
+    const updated = await tx.payment.update({
+      where: { id: payment.id },
+      data: {
+        status,
+        ...(status === PaymentStatus.SUCCESS ? { paidAt: new Date() } : {}),
+        gatewayReference: sessionId,
+      },
+    });
+    if (status === PaymentStatus.SUCCESS) {
+      await tx.feeInvoice.update({
+        where: { id: payment.invoiceId },
+        data: { status: InvoiceStatus.PAID },
+      });
+    }
+    return updated;
+  });
+};
+
+const completeCheckout = async (sessionId: string) => {
+  const session = await getStripe().checkout.sessions.retrieve(sessionId);
+  if (session.payment_status !== "paid") {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Stripe payment is not completed",
+    );
+  }
+  return updateCheckoutPayment(session.id, PaymentStatus.SUCCESS);
+};
+
+const cancelCheckout = async (sessionId: string) => {
+  await getStripe().checkout.sessions.retrieve(sessionId);
+  return updateCheckoutPayment(sessionId, PaymentStatus.CANCELLED);
+};
+
+const getBkashCallbackUrl = () =>
+  `${(config.backend_url ?? `http://localhost:${config.port ?? 5000}`).replace(/\/$/, "")}/api/v1/payments/bkash/callback`;
+
+const createBkashPayment = async (userId: string, invoiceId: string) => {
+  const student = await prisma.studentProfile.findUnique({ where: { userId } });
+  if (!student) {
+    throw new AppError(httpStatus.NOT_FOUND, "Student profile not found");
+  }
+
+  const invoice = await prisma.feeInvoice.findFirst({
+    where: { id: invoiceId, studentId: student.id, deletedAt: null },
+    include: { payments: { where: { deletedAt: null } } },
+  });
+  if (!invoice) throw new AppError(httpStatus.NOT_FOUND, "Invoice not found");
+  if (
+    invoice.status === InvoiceStatus.PAID ||
+    invoice.payments.some((payment) => payment.status === PaymentStatus.SUCCESS)
+  ) {
+    throw new AppError(httpStatus.CONFLICT, "Invoice is already paid");
+  }
+  if (invoice.status === InvoiceStatus.CANCELLED) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invoice is cancelled");
+  }
+  if (new Date() > invoice.dueDate) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invoice is past due");
+  }
+  if (
+    invoice.payments.some(
+      (payment) =>
+        payment.status === PaymentStatus.INITIATED ||
+        payment.status === PaymentStatus.PENDING,
+    )
+  ) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "A payment is already in progress for this invoice",
+    );
+  }
+
+  const transactionId = `TXN-${crypto.randomUUID()}`;
+  const payment = await prisma.payment.create({
+    data: {
+      transactionId,
+      invoiceId: invoice.id,
+      studentId: student.id,
+      amount: invoice.amount,
+      gateway: PaymentGateway.BKASH,
+      status: PaymentStatus.INITIATED,
+    },
+  });
+
+  try {
+    const gatewayResponse = await createBkashGatewayPayment(
+      transactionId,
+      invoice.amount.toString(),
+      userId,
+    );
+    if (
+      typeof gatewayResponse.paymentID !== "string" ||
+      typeof gatewayResponse.bkashURL !== "string"
+    ) {
+      throw new AppError(
+        httpStatus.BAD_GATEWAY,
+        "Invalid bKash payment response",
+      );
+    }
+    const updated = await prisma.payment.update({
+      where: { id: payment.id },
+      data: {
+        status: PaymentStatus.PENDING,
+        gatewayReference: gatewayResponse.paymentID,
+        gatewayResponse: gatewayResponse as any,
+      },
+    });
+    return { payment: updated, paymentUrl: gatewayResponse.bkashURL };
+  } catch (error) {
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: {
+        status: PaymentStatus.FAILED,
+        gatewayResponse: {
+          error: error instanceof Error ? error.message : "Gateway error",
+        },
+      },
+    });
+    throw error;
+  }
+};
+
+const handleBkashCallback = async (query: Record<string, unknown>) => {
+  const paymentId =
+    typeof query.paymentID === "string" ? query.paymentID : undefined;
+  const status =
+    typeof query.status === "string" ? query.status.toLowerCase() : undefined;
+  if (!paymentId) {
+    throw new AppError(httpStatus.BAD_REQUEST, "bKash payment id is missing");
+  }
+  if (!status) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "bKash payment status is missing",
+    );
+  }
+
+  const payment = await prisma.payment.findFirst({
+    where: { gatewayReference: paymentId, gateway: PaymentGateway.BKASH },
+    include: { invoice: true },
+  });
+  if (!payment) throw new AppError(httpStatus.NOT_FOUND, "Payment not found");
+  if (payment.status === PaymentStatus.SUCCESS) {
+    return { redirectUrl: `${config.frontend_url}/payments?status=success` };
+  }
+
+  if (status !== "success") {
+    const paymentStatus =
+      status === "cancel" ? PaymentStatus.CANCELLED : PaymentStatus.FAILED;
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: { status: paymentStatus, gatewayResponse: query as any },
+    });
+    return {
+      redirectUrl: `${config.frontend_url}/payments?status=${status === "cancel" ? "cancel" : "failed"}`,
+    };
+  }
+
+  const token = await getBkashIdToken();
+  const response = await fetch(
+    `${config.bkash_base_url}/tokenized/checkout/execute`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: token,
+        "X-App-Key": config.bkash_app_key,
+      },
+      body: JSON.stringify({ paymentID: paymentId }),
+    },
+  );
+  const executed = (await response.json()) as Record<string, any>;
+  if (!response.ok || executed.status !== "Completed") {
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: { status: PaymentStatus.FAILED, gatewayResponse: executed },
+    });
+    throw new AppError(
+      httpStatus.BAD_GATEWAY,
+      "bKash payment execution failed",
+    );
+  }
+  if (Number(executed.amount) !== Number(payment.amount)) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Payment amount does not match invoice",
+    );
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.payment.update({
+      where: { id: payment.id },
+      data: {
+        status: PaymentStatus.SUCCESS,
+        gatewayReference: paymentId,
+        gatewayResponse: executed,
+        paidAt: executed.paymentExecuteTime
+          ? new Date(executed.paymentExecuteTime)
+          : new Date(),
+      },
+    });
+    await tx.feeInvoice.update({
+      where: { id: payment.invoiceId },
+      data: { status: InvoiceStatus.PAID },
+    });
+  });
+
+  return { redirectUrl: `${config.frontend_url}/payments?status=success` };
+};
+
+const createBkashGatewayPayment = async (
+  transactionId: string,
+  amount: string,
+  payerReference = transactionId,
+) => {
   const requiredConfig = [
     config.bkash_base_url,
     config.bkash_username,
     config.bkash_password,
     config.bkash_app_key,
     config.bkash_app_secret,
-    config.bkash_callback_url,
   ];
   if (
     requiredConfig.some(
@@ -83,9 +412,9 @@ const createBkashPayment = async (transactionId: string, amount: string) => {
         "X-App-Key": config.bkash_app_key,
       },
       body: JSON.stringify({
-        mode: "001",
-        payerReference: transactionId,
-        callbackURL: config.bkash_callback_url,
+        mode: "0011",
+        payerReference,
+        callbackURL: getBkashCallbackUrl(),
         amount,
         currency: "BDT",
         intent: "sale",
@@ -142,7 +471,7 @@ const initiate = async (userId: string, data: InitiatePaymentData) => {
   });
 
   try {
-    const gatewayResponse = await createBkashPayment(
+    const gatewayResponse = await createBkashGatewayPayment(
       transactionId,
       invoice.amount.toString(),
     );
@@ -262,4 +591,13 @@ const getById = async (userId: string, role: Role, id: string) => {
   if (!payment) throw new AppError(httpStatus.NOT_FOUND, "Payment not found");
   return payment;
 };
-export const PaymentService = { initiate, processWebhook, getById };
+export const PaymentService = {
+  initiate,
+  processWebhook,
+  createCheckoutSession,
+  completeCheckout,
+  cancelCheckout,
+  createBkashPayment,
+  handleBkashCallback,
+  getById,
+};

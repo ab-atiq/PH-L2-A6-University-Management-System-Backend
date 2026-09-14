@@ -4,10 +4,12 @@ import type z from "zod";
 import { AppError } from "../utils/AppError.js";
 import { catchAsync } from "../utils/catchAsync.js";
 
-export const validateRequest = (zodSchema: z.ZodObject) => {
+export const validateRequest = (
+  zodSchema: z.ZodObject,
+  source: "body" | "query" = "body",
+) => {
   return catchAsync((req: Request, res: Response, next: NextFunction) => {
-    // const payload = req.body ? req.body : {}
-    const payload = req.body ?? {};
+    const payload = source === "query" ? req.query : (req.body ?? {});
 
     const result = zodSchema.safeParse(payload);
 
@@ -21,7 +23,11 @@ export const validateRequest = (zodSchema: z.ZodObject) => {
       );
     }
 
-    req.body = result.data;
+    if (source === "query") {
+      Object.assign(req.query, result.data);
+    } else {
+      req.body = result.data;
+    }
 
     next();
   });

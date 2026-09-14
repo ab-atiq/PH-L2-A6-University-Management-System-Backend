@@ -5,6 +5,10 @@ export type InitiatePaymentData = {
   gateway: PaymentGateway;
 };
 
+export type CheckoutPaymentData = {
+  invoiceId: string;
+};
+
 export type PaymentContext = {
   userId: string;
   role: Role;
