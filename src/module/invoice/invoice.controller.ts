@@ -10,6 +10,7 @@ const user = (req: Request) => {
     throw new AppError(httpStatus.UNAUTHORIZED, "Authentication required");
   return req.user;
 };
+
 const create = catchAsync(async (req, res) =>
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -18,6 +19,7 @@ const create = catchAsync(async (req, res) =>
     data: await InvoiceService.create(req.body, user(req).userId),
   }),
 );
+
 const page = catchAsync(async (req, res) => {
   const current = user(req);
   sendResponse(res, {
@@ -27,6 +29,7 @@ const page = catchAsync(async (req, res) => {
     ...(await InvoiceService.page(current.userId, current.role, req.query)),
   });
 });
+
 const getById = catchAsync(async (req, res) => {
   const current = user(req);
   sendResponse(res, {
@@ -40,4 +43,5 @@ const getById = catchAsync(async (req, res) => {
     ),
   });
 });
+
 export const InvoiceController = { create, page, getById };

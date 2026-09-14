@@ -5,6 +5,7 @@ export const notificationListSchema = z.object({
   limit: z.coerce.number().int().positive().max(100).default(20),
   isRead: z.coerce.boolean().optional(),
 });
+
 export const createNotificationSchema = z.object({
   userId: z.string().uuid(),
   type: z

@@ -13,11 +13,27 @@ import { AppError } from "../../utils/AppError.js";
 import type { InitiatePaymentData } from "./payment.interface.js";
 
 const createBkashPayment = async (transactionId: string, amount: string) => {
-  if (!config.bkash_base_url || !config.bkash_username || !config.bkash_app_key)
+  const requiredConfig = [
+    config.bkash_base_url,
+    config.bkash_username,
+    config.bkash_password,
+    config.bkash_app_key,
+    config.bkash_app_secret,
+    config.bkash_callback_url,
+  ];
+  if (
+    requiredConfig.some(
+      (value) =>
+        !value ||
+        value.startsWith("your_bkash_") ||
+        value.includes("your-public-domain"),
+    )
+  ) {
     throw new AppError(
       httpStatus.SERVICE_UNAVAILABLE,
       "bKash is not configured",
     );
+  }
   const tokenResponse = await fetch(
     `${config.bkash_base_url}/tokenized/checkout/token/grant`,
     {
@@ -34,12 +50,28 @@ const createBkashPayment = async (transactionId: string, amount: string) => {
       }),
     },
   );
-  if (!tokenResponse.ok)
-    throw new AppError(httpStatus.BAD_GATEWAY, "bKash token grant failed");
+  if (!tokenResponse.ok) {
+    const error = (await tokenResponse.json().catch(() => null)) as {
+      errorCode?: string;
+      errorMessage?: string;
+    } | null;
+    throw new AppError(
+      httpStatus.BAD_GATEWAY,
+      `bKash token grant failed${
+        error?.errorCode || error?.errorMessage
+          ? `: ${error.errorCode ?? ""} ${error.errorMessage ?? ""}`.trim()
+          : ` with HTTP ${tokenResponse.status}`
+      }`,
+    );
+  }
+
   const token = ((await tokenResponse.json()) as { id_token?: string })
     .id_token;
-  if (!token)
+
+  if (!token) {
     throw new AppError(httpStatus.BAD_GATEWAY, "bKash token was not returned");
+  }
+
   const response = await fetch(
     `${config.bkash_base_url}/tokenized/checkout/create`,
     {
@@ -61,31 +93,42 @@ const createBkashPayment = async (transactionId: string, amount: string) => {
       }),
     },
   );
-  if (!response.ok)
+
+  if (!response.ok) {
     throw new AppError(httpStatus.BAD_GATEWAY, "bKash payment creation failed");
+  }
+
   return (await response.json()) as Record<string, unknown>;
 };
 
 const initiate = async (userId: string, data: InitiatePaymentData) => {
   const student = await prisma.studentProfile.findUnique({ where: { userId } });
-  if (!student)
+  if (!student) {
     throw new AppError(httpStatus.NOT_FOUND, "Student profile not found");
+  }
+
   const invoice = await prisma.feeInvoice.findFirst({
     where: { id: data.invoiceId, studentId: student.id, deletedAt: null },
     include: { payments: { where: { status: PaymentStatus.SUCCESS } } },
   });
-  if (!invoice) throw new AppError(httpStatus.NOT_FOUND, "Invoice not found");
-  if (invoice.status === InvoiceStatus.PAID || invoice.payments.length)
+  if (!invoice) {
+    throw new AppError(httpStatus.NOT_FOUND, "Invoice not found");
+  }
+  if (invoice.status === InvoiceStatus.PAID || invoice.payments.length) {
     throw new AppError(httpStatus.CONFLICT, "Invoice is already paid");
-  if (invoice.status === InvoiceStatus.CANCELLED)
+  }
+  if (invoice.status === InvoiceStatus.CANCELLED) {
     throw new AppError(httpStatus.BAD_REQUEST, "Invoice is cancelled");
-  if (new Date() > invoice.dueDate)
+  }
+  if (new Date() > invoice.dueDate) {
     throw new AppError(httpStatus.BAD_REQUEST, "Invoice is past due");
-  if (data.gateway !== PaymentGateway.BKASH)
+  }
+  if (data.gateway !== PaymentGateway.BKASH) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       "This gateway is not configured for real payments",
     );
+  }
   const transactionId = `TXN-${crypto.randomUUID()}`;
   const payment = await prisma.payment.create({
     data: {
@@ -97,6 +140,7 @@ const initiate = async (userId: string, data: InitiatePaymentData) => {
       status: PaymentStatus.INITIATED,
     },
   });
+
   try {
     const gatewayResponse = await createBkashPayment(
       transactionId,

@@ -10,8 +10,10 @@ const page = async (userId: string, role: Role, query: InvoiceListQuery) => {
     role === Role.STUDENT
       ? await prisma.studentProfile.findUnique({ where: { userId } })
       : null;
-  if (role === Role.STUDENT && !student)
+  if (role === Role.STUDENT && !student) {
     throw new AppError(httpStatus.NOT_FOUND, "Student profile not found");
+  }
+
   const pageNumber = Number(query.page || 1);
   const limit = Math.min(Number(query.limit || 20), 100);
   const where: any = {
@@ -19,6 +21,7 @@ const page = async (userId: string, role: Role, query: InvoiceListQuery) => {
     ...(student ? { studentId: student.id } : {}),
     ...(query.status ? { status: query.status } : {}),
   };
+
   const [data, total] = await Promise.all([
     prisma.feeInvoice.findMany({
       where,
@@ -42,8 +45,10 @@ const page = async (userId: string, role: Role, query: InvoiceListQuery) => {
       take: limit,
       orderBy: { dueDate: "asc" },
     }),
+
     prisma.feeInvoice.count({ where }),
   ]);
+
   return {
     data,
     meta: {
@@ -59,21 +64,27 @@ const create = async (data: any, actorId: string) => {
   const student = await prisma.studentProfile.findUnique({
     where: { id: data.studentId },
   });
-  if (!student)
+
+  if (!student) {
     throw new AppError(httpStatus.NOT_FOUND, "Student profile not found");
+  }
+
   if (
     data.semesterId &&
     !(await prisma.semester.findFirst({
       where: { id: data.semesterId, deletedAt: null },
     }))
-  )
+  ) {
     throw new AppError(httpStatus.NOT_FOUND, "Semester not found");
+  }
+
   const invoice = await prisma.feeInvoice.create({
     data: {
       ...data,
       invoiceNumber: `INV-${new Date().getFullYear()}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`,
     },
   });
+
   await prisma.auditLog.create({
     data: {
       actorId,
@@ -82,6 +93,7 @@ const create = async (data: any, actorId: string) => {
       entityId: invoice.id,
     },
   });
+
   return invoice;
 };
 
@@ -90,8 +102,11 @@ const getById = async (userId: string, role: Role, id: string) => {
     role === Role.STUDENT
       ? await prisma.studentProfile.findUnique({ where: { userId } })
       : null;
-  if (role === Role.STUDENT && !student)
+
+  if (role === Role.STUDENT && !student) {
     throw new AppError(httpStatus.NOT_FOUND, "Student profile not found");
+  }
+
   const invoice = await prisma.feeInvoice.findFirst({
     where: {
       id,
@@ -110,7 +125,11 @@ const getById = async (userId: string, role: Role, id: string) => {
       payments: true,
     },
   });
-  if (!invoice) throw new AppError(httpStatus.NOT_FOUND, "Invoice not found");
+
+  if (!invoice) {
+    throw new AppError(httpStatus.NOT_FOUND, "Invoice not found");
+  }
+
   return invoice;
 };
 

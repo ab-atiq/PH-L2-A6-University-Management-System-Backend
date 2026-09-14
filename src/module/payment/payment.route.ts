@@ -12,10 +12,13 @@ router.post(
   validateRequest(initiatePaymentSchema),
   PaymentController.initiate,
 );
+
 router.post(
   "/webhook",
   validateRequest(webhookSchema),
   PaymentController.webhook,
 );
+
 router.get("/:id", auth(Role.ADMIN, Role.STUDENT), PaymentController.getById);
+
 export const PaymentRoutes = router;

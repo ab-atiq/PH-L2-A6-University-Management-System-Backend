@@ -8,6 +8,7 @@ export const createInvoiceSchema = z.object({
   amount: z.coerce.number().positive(),
   dueDate: z.coerce.date(),
 });
+
 export const invoiceListSchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(20),
