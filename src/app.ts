@@ -23,6 +23,7 @@ import { SectionFacultyRoutes } from "./module/section-faculty/section-faculty.r
 import { SectionRoutes } from "./module/section/section.route.js";
 import { SemesterRoutes } from "./module/semester/semester.route.js";
 import { StudentRoutes } from "./module/student/student.route.js";
+import { TranscriptRoutes } from "./module/transcript/transcript.route.js";
 import { UserRoutes } from "./module/user/user.route.js";
 
 const app = express();
@@ -59,6 +60,7 @@ app.use("/api/v1/results", ResultRoutes);
 app.use("/api/v1/invoices", InvoiceRoutes);
 app.use("/api/v1/payments", PaymentRoutes);
 app.use("/api/v1/notifications", NotificationRoutes);
+app.use("/api/v1/transcripts", TranscriptRoutes);
 app.use("/api/v1/audit-logs", AuditLogRoutes);
 app.use("/api/v1/auth", AuthRoutes);
 
